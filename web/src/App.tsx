@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Navigation } from './components/Navigation'
 import { Dashboard } from './pages/Dashboard'
-import { WorkoutChat } from './pages/WorkoutChat'
+import { WorkoutSession } from './pages/WorkoutSession'
 import { QuickLog } from './pages/QuickLog'
 import { Nutrition } from './pages/Nutrition'
 import { Settings } from './pages/Settings'
@@ -18,7 +18,7 @@ function App() {
       case 'dashboard':
         return <Dashboard />
       case 'workout':
-        return <WorkoutChat />
+        return <WorkoutSession />
       case 'log':
         return <QuickLog />
       case 'nutrition':
