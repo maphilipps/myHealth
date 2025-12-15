@@ -1,0 +1,18 @@
+{
+  "hooks": [
+    {
+      "event": "SessionStart",
+      "type": "prompt",
+      "prompt": "Check if there's new Apple Health data to sync. Look for the Apple Health export at ~/Downloads/ or ~/Desktop/ for files named 'export.xml' or 'apple_health_export' folder modified in the last 24 hours. If found, offer to import the data using /myhealth:import. If no new export found, just acknowledge the session start silently without mentioning sync."
+    },
+    {
+      "event": "PreToolUse",
+      "matcher": {
+        "tool_name": "Write|Edit",
+        "file_path": ".*/data/.*\\.yaml$"
+      },
+      "type": "prompt",
+      "prompt": "Before writing this health data file, validate the YAML structure:\n\n1. Check required fields based on file location:\n   - data/daily/*.yaml: Must have 'date' field\n   - data/workouts/*.yaml: Must have 'date', 'type', and 'exercises' with at least one entry\n   - data/nutrition/*.yaml: Must have 'date' and either 'meals' or 'totals'\n   - data/vitals/*.yaml: Must have 'date' and at least one measurement\n\n2. Validate value ranges:\n   - weight_kg: 30-300\n   - reps: 1-100\n   - rpe: 1-10\n   - sleep.hours: 0-24\n   - mood/energy/quality: 1-5\n\n3. Check date format: YYYY-MM-DD\n\nIf validation passes, proceed with the write. If validation fails, report the specific issue and ask for correction before writing."
+    }
+  ]
+}

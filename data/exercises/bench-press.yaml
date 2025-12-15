@@ -1,0 +1,26 @@
+name: Bench Press
+category: chest
+muscle_groups:
+  primary: [chest, triceps]
+  secondary: [front_delts]
+equipment: barbell
+type: compound
+
+progression:
+  method: double_progression
+  rep_range: [6, 10]
+  weight_increment_kg: 2.5
+
+form_cues:
+  - "Retract shoulder blades"
+  - "Feet flat on floor"
+  - "Bar path slightly diagonal"
+  - "Full ROM to chest"
+  - "Arch upper back, not lower"
+
+variations:
+  - Incline Bench Press
+  - Decline Bench Press
+  - Close Grip Bench Press
+  - Dumbbell Bench Press
+  - Pause Bench Press

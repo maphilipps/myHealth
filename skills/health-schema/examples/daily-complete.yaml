@@ -1,0 +1,37 @@
+# Complete daily log example
+# File: data/daily/2024-01-15.yaml
+
+date: 2024-01-15
+weight_kg: 82.5
+body_fat_percent: 18.5
+
+water_ml: 2500
+
+sleep:
+  hours: 7.5
+  quality: 4
+  deep_hours: 2.1
+  rem_hours: 1.8
+  bedtime: "23:00"
+  wake_time: "06:30"
+
+# From Apple Health
+steps: 8432
+active_calories: 450
+resting_heart_rate: 58
+
+# Subjective metrics (1-5 scale)
+mood: 4
+energy: 4
+stress: 2
+motivation: 4
+
+# Tags for filtering
+tags:
+  - training_day
+  - good_sleep
+  - high_protein
+
+notes: |
+  Great day overall. Morning workout went well.
+  Hit all protein targets. Felt energetic throughout.

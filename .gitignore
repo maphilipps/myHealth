@@ -32,3 +32,6 @@ web/.env.local
 secrets/
 *.pem
 *.key
+
+# Playwright MCP screenshots
+.playwright-mcp/

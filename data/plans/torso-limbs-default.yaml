@@ -1,0 +1,79 @@
+name: Torso-Limbs Split
+description: 4-day upper/lower split for hypertrophy
+created: 2024-12-15
+active: true
+
+schedule:
+  - day: monday
+    type: torso
+  - day: tuesday
+    type: limbs
+  - day: wednesday
+    type: rest
+  - day: thursday
+    type: torso
+  - day: friday
+    type: limbs
+  - day: saturday
+    type: rest
+  - day: sunday
+    type: rest
+
+workouts:
+  torso:
+    exercises:
+      - name: Bench Press
+        sets: 4
+        rep_range: [6, 10]
+        rest_sec: 150
+      - name: Bent Over Row
+        sets: 4
+        rep_range: [8, 12]
+        rest_sec: 120
+      - name: Overhead Press
+        sets: 3
+        rep_range: [8, 12]
+        rest_sec: 120
+      - name: Lat Pulldown
+        sets: 3
+        rep_range: [10, 12]
+        rest_sec: 90
+      - name: Cable Fly
+        sets: 3
+        rep_range: [12, 15]
+        rest_sec: 60
+      - name: Face Pull
+        sets: 3
+        rep_range: [15, 20]
+        rest_sec: 60
+
+  limbs:
+    exercises:
+      - name: Squat
+        sets: 4
+        rep_range: [6, 10]
+        rest_sec: 180
+      - name: Romanian Deadlift
+        sets: 3
+        rep_range: [8, 12]
+        rest_sec: 120
+      - name: Leg Press
+        sets: 3
+        rep_range: [10, 15]
+        rest_sec: 90
+      - name: Leg Curl
+        sets: 3
+        rep_range: [10, 15]
+        rest_sec: 60
+      - name: Barbell Curl
+        sets: 3
+        rep_range: [8, 12]
+        rest_sec: 60
+      - name: Tricep Pushdown
+        sets: 3
+        rep_range: [10, 15]
+        rest_sec: 60
+
+progression:
+  type: intelligent
+  deload_frequency_weeks: 4
