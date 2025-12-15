@@ -1,14 +1,32 @@
 import { useState, useEffect } from 'react'
 import { saveApiKey, hasApiKey, clearApiKey } from '../lib/claude-api'
+import {
+  getPendingChangesCount,
+  downloadPendingChanges,
+  clearPendingChanges,
+  generateCommitMessage,
+  getPendingChanges
+} from '../lib/git-integration'
 
 export function Settings() {
   const [apiKey, setApiKey] = useState('')
   const [hasKey, setHasKey] = useState(false)
   const [saved, setSaved] = useState(false)
+  const [pendingCount, setPendingCount] = useState(0)
+  const [commitMessage, setCommitMessage] = useState('')
 
   useEffect(() => {
     setHasKey(hasApiKey())
+    updatePendingStatus()
   }, [])
+
+  const updatePendingStatus = () => {
+    const count = getPendingChangesCount()
+    setPendingCount(count)
+    if (count > 0) {
+      setCommitMessage(generateCommitMessage(getPendingChanges()))
+    }
+  }
 
   const handleSave = () => {
     if (apiKey.trim()) {
@@ -25,6 +43,17 @@ export function Settings() {
     setHasKey(false)
   }
 
+  const handleExport = () => {
+    downloadPendingChanges()
+  }
+
+  const handleClearPending = () => {
+    if (confirm('Alle ausstehenden Änderungen verwerfen?')) {
+      clearPendingChanges()
+      updatePendingStatus()
+    }
+  }
+
   return (
     <div className="space-y-6">
       <div>
@@ -35,6 +64,36 @@ export function Settings() {
           App-Konfiguration
         </p>
       </div>
+
+      {/* Pending Changes Alert */}
+      {pendingCount > 0 && (
+        <div className="p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+          <div className="flex items-start justify-between">
+            <div>
+              <h3 className="font-medium text-amber-800 dark:text-amber-200">
+                📝 {pendingCount} ausstehende Änderung{pendingCount > 1 ? 'en' : ''}
+              </h3>
+              <p className="text-sm text-amber-600 dark:text-amber-300 mt-1">
+                {commitMessage}
+              </p>
+            </div>
+          </div>
+          <div className="flex gap-2 mt-3">
+            <button
+              onClick={handleExport}
+              className="px-3 py-1.5 bg-amber-600 text-white text-sm rounded-lg hover:bg-amber-700 transition-colors"
+            >
+              Als YAML exportieren
+            </button>
+            <button
+              onClick={handleClearPending}
+              className="px-3 py-1.5 text-amber-600 text-sm hover:bg-amber-100 dark:hover:bg-amber-900/30 rounded-lg transition-colors"
+            >
+              Verwerfen
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* API Key Section */}
       <div className="card">
@@ -179,13 +238,34 @@ export function Settings() {
             </p>
           </button>
 
-          <button className="w-full py-3 text-left px-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+          <button
+            onClick={handleExport}
+            className="w-full py-3 text-left px-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+          >
             <span className="font-medium">Daten exportieren</span>
             <p className="text-sm text-gray-500 dark:text-gray-400">
               Alle Daten als YAML herunterladen
             </p>
           </button>
         </div>
+      </div>
+
+      {/* Git Integration Info */}
+      <div className="card">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+          Git Integration
+        </h2>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">
+          Änderungen werden lokal gespeichert und können als YAML exportiert werden.
+          Um sie in Git zu committen:
+        </p>
+        <pre className="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg text-xs overflow-x-auto">
+          <code>
+{`cd ~/Documents/myHealth
+git add data/
+git commit -m "data: Update health data"`}
+          </code>
+        </pre>
       </div>
 
       {/* Version */}

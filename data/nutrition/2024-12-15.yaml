@@ -1,0 +1,84 @@
+date: 2024-12-15
+target_calories: 2500
+target_protein: 165
+
+meals:
+  - type: breakfast
+    time: "08:30"
+    items:
+      - name: Haferflocken
+        amount: 80g
+        calories: 300
+        protein: 12
+      - name: Protein Shake (Whey)
+        amount: 30g
+        calories: 120
+        protein: 24
+      - name: Beeren (gemischt)
+        amount: 100g
+        calories: 45
+        protein: 1
+      - name: Milch
+        amount: 200ml
+        calories: 92
+        protein: 7
+
+  - type: lunch
+    time: "12:30"
+    items:
+      - name: Hähnchenbrust
+        amount: 200g
+        calories: 220
+        protein: 46
+      - name: Reis (gekocht)
+        amount: 150g
+        calories: 195
+        protein: 4
+      - name: Brokkoli
+        amount: 150g
+        calories: 51
+        protein: 4
+      - name: Olivenöl
+        amount: 10ml
+        calories: 88
+        protein: 0
+
+  - type: snack
+    time: "16:00"
+    items:
+      - name: Griechischer Joghurt
+        amount: 200g
+        calories: 130
+        protein: 20
+      - name: Mandeln
+        amount: 30g
+        calories: 180
+        protein: 6
+
+  - type: dinner
+    time: "19:30"
+    items:
+      - name: Lachs
+        amount: 150g
+        calories: 280
+        protein: 30
+      - name: Süßkartoffel
+        amount: 200g
+        calories: 172
+        protein: 3
+      - name: Gemischter Salat
+        amount: 100g
+        calories: 20
+        protein: 2
+      - name: Avocado
+        amount: 50g
+        calories: 80
+        protein: 1
+
+totals:
+  calories: 1973
+  protein: 160
+  carbs: 195
+  fat: 65
+
+notes: "Ruhetag - etwas weniger Kalorien als geplant"

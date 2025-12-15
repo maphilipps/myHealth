@@ -1,0 +1,82 @@
+date: 2024-12-11
+type: limbs
+plan: torso-limbs-default
+duration_min: 68
+feeling: 3
+notes: "Etwas müde, aber durchgezogen"
+
+exercises:
+  - name: Squat
+    sets:
+      - weight: 100
+        reps: 8
+        rpe: 8
+      - weight: 100
+        reps: 7
+        rpe: 8.5
+      - weight: 100
+        reps: 6
+        rpe: 9
+      - weight: 100
+        reps: 6
+        rpe: 9.5
+
+  - name: Romanian Deadlift
+    sets:
+      - weight: 80
+        reps: 10
+        rpe: 7
+      - weight: 80
+        reps: 10
+        rpe: 8
+      - weight: 80
+        reps: 9
+        rpe: 8.5
+
+  - name: Leg Press
+    sets:
+      - weight: 180
+        reps: 12
+        rpe: 7
+      - weight: 180
+        reps: 12
+        rpe: 8
+      - weight: 180
+        reps: 10
+        rpe: 8.5
+
+  - name: Leg Curl
+    sets:
+      - weight: 45
+        reps: 12
+        rpe: 7
+      - weight: 45
+        reps: 12
+        rpe: 8
+      - weight: 45
+        reps: 10
+        rpe: 8.5
+
+  - name: Barbell Curl
+    sets:
+      - weight: 30
+        reps: 10
+        rpe: 8
+      - weight: 30
+        reps: 9
+        rpe: 8.5
+      - weight: 30
+        reps: 8
+        rpe: 9
+
+  - name: Tricep Pushdown
+    sets:
+      - weight: 35
+        reps: 12
+        rpe: 7
+      - weight: 35
+        reps: 12
+        rpe: 8
+      - weight: 35
+        reps: 10
+        rpe: 8.5

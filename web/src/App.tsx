@@ -5,8 +5,10 @@ import { WorkoutChat } from './pages/WorkoutChat'
 import { QuickLog } from './pages/QuickLog'
 import { Nutrition } from './pages/Nutrition'
 import { Settings } from './pages/Settings'
+import { History } from './pages/History'
+import { Progress } from './pages/Progress'
 
-type Page = 'dashboard' | 'workout' | 'log' | 'nutrition' | 'settings'
+type Page = 'dashboard' | 'workout' | 'log' | 'nutrition' | 'history' | 'progress' | 'settings'
 
 function App() {
   const [currentPage, setCurrentPage] = useState<Page>('dashboard')
@@ -21,6 +23,10 @@ function App() {
         return <QuickLog />
       case 'nutrition':
         return <Nutrition />
+      case 'history':
+        return <History />
+      case 'progress':
+        return <Progress />
       case 'settings':
         return <Settings />
       default:

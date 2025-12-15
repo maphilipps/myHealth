@@ -1,0 +1,74 @@
+date: 2024-12-13
+type: torso
+plan: torso-limbs-default
+duration_min: 75
+feeling: 5
+notes: "PR bei Bankdrücken! 82.5kg x 8"
+
+exercises:
+  - name: Bench Press
+    sets:
+      - weight: 82.5
+        reps: 8
+        rpe: 8
+        pr: true
+      - weight: 82.5
+        reps: 7
+        rpe: 8.5
+      - weight: 82.5
+        reps: 6
+        rpe: 9
+      - weight: 80
+        reps: 8
+        rpe: 8
+
+  - name: Barbell Row
+    sets:
+      - weight: 72.5
+        reps: 10
+        rpe: 8
+      - weight: 72.5
+        reps: 9
+        rpe: 8.5
+      - weight: 72.5
+        reps: 8
+        rpe: 9
+      - weight: 70
+        reps: 10
+        rpe: 8
+
+  - name: Overhead Press
+    sets:
+      - weight: 52.5
+        reps: 9
+        rpe: 8
+      - weight: 52.5
+        reps: 8
+        rpe: 8.5
+      - weight: 50
+        reps: 10
+        rpe: 8
+
+  - name: Lat Pulldown
+    sets:
+      - weight: 62.5
+        reps: 11
+        rpe: 8
+      - weight: 62.5
+        reps: 10
+        rpe: 8.5
+      - weight: 60
+        reps: 12
+        rpe: 8
+
+  - name: Face Pull
+    sets:
+      - weight: 27.5
+        reps: 17
+        rpe: 8
+      - weight: 27.5
+        reps: 15
+        rpe: 8.5
+      - weight: 25
+        reps: 18
+        rpe: 7

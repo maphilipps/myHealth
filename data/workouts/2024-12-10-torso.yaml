@@ -1,0 +1,73 @@
+date: 2024-12-10
+type: torso
+plan: torso-limbs-default
+duration_min: 72
+feeling: 5
+notes: "Sehr gute Session, alle Sätze geschafft"
+
+exercises:
+  - name: Bench Press
+    sets:
+      - weight: 80
+        reps: 8
+        rpe: 7
+      - weight: 80
+        reps: 8
+        rpe: 8
+      - weight: 80
+        reps: 7
+        rpe: 8.5
+      - weight: 80
+        reps: 6
+        rpe: 9
+
+  - name: Barbell Row
+    sets:
+      - weight: 70
+        reps: 10
+        rpe: 7
+      - weight: 70
+        reps: 10
+        rpe: 8
+      - weight: 70
+        reps: 9
+        rpe: 8.5
+      - weight: 70
+        reps: 8
+        rpe: 9
+
+  - name: Overhead Press
+    sets:
+      - weight: 50
+        reps: 10
+        rpe: 7
+      - weight: 50
+        reps: 9
+        rpe: 8
+      - weight: 50
+        reps: 8
+        rpe: 9
+
+  - name: Lat Pulldown
+    sets:
+      - weight: 60
+        reps: 12
+        rpe: 7
+      - weight: 60
+        reps: 11
+        rpe: 8
+      - weight: 60
+        reps: 10
+        rpe: 8.5
+
+  - name: Face Pull
+    sets:
+      - weight: 25
+        reps: 18
+        rpe: 7
+      - weight: 25
+        reps: 16
+        rpe: 8
+      - weight: 25
+        reps: 15
+        rpe: 8

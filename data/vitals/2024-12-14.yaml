@@ -1,0 +1,21 @@
+date: 2024-12-14
+
+heart_rate:
+  resting: 56
+  average: 85
+  max: 168
+
+blood_pressure:
+  systolic: 122
+  diastolic: 78
+  time: "07:00"
+
+hrv:
+  average: 42
+
+body_composition:
+  weight: 82.6
+  body_fat_percent: 15.3
+  muscle_mass: 39.4
+
+notes: "Trainingstag - höhere HR wegen Workout"

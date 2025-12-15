@@ -1,0 +1,21 @@
+date: 2024-12-15
+
+heart_rate:
+  resting: 58
+  average: 72
+  max: 142
+
+blood_pressure:
+  systolic: 118
+  diastolic: 75
+  time: "07:30"
+
+hrv:
+  average: 45
+
+body_composition:
+  weight: 82.5
+  body_fat_percent: 15.2
+  muscle_mass: 39.5
+
+notes: "Gute Werte nach Erholungsnacht"

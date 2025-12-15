@@ -1,0 +1,100 @@
+date: 2024-12-14
+target_calories: 2500
+target_protein: 165
+
+meals:
+  - type: breakfast
+    time: "07:30"
+    items:
+      - name: Rührei
+        amount: 3 Eier
+        calories: 210
+        protein: 18
+      - name: Vollkornbrot
+        amount: 2 Scheiben
+        calories: 180
+        protein: 8
+      - name: Avocado
+        amount: 50g
+        calories: 80
+        protein: 1
+
+  - type: pre_workout
+    time: "10:00"
+    items:
+      - name: Banane
+        amount: 1 Stück
+        calories: 105
+        protein: 1
+      - name: Protein Shake
+        amount: 30g
+        calories: 120
+        protein: 24
+
+  - type: lunch
+    time: "13:00"
+    items:
+      - name: Rindfleisch (mager)
+        amount: 180g
+        calories: 270
+        protein: 45
+      - name: Kartoffeln
+        amount: 200g
+        calories: 154
+        protein: 4
+      - name: Grüne Bohnen
+        amount: 150g
+        calories: 47
+        protein: 3
+
+  - type: post_workout
+    time: "16:30"
+    items:
+      - name: Protein Shake
+        amount: 40g
+        calories: 160
+        protein: 32
+      - name: Haferflocken
+        amount: 50g
+        calories: 188
+        protein: 7
+
+  - type: dinner
+    time: "19:00"
+    items:
+      - name: Thunfisch (Dose)
+        amount: 150g
+        calories: 165
+        protein: 36
+      - name: Quinoa
+        amount: 100g
+        calories: 120
+        protein: 4
+      - name: Spinat
+        amount: 100g
+        calories: 23
+        protein: 3
+      - name: Feta
+        amount: 30g
+        calories: 75
+        protein: 4
+
+  - type: snack
+    time: "21:00"
+    items:
+      - name: Magerquark
+        amount: 250g
+        calories: 175
+        protein: 30
+      - name: Honig
+        amount: 15g
+        calories: 45
+        protein: 0
+
+totals:
+  calories: 2317
+  protein: 220
+  carbs: 210
+  fat: 72
+
+notes: "Trainingstag - extra Protein"
