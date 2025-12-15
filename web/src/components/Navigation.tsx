@@ -2,14 +2,14 @@ import {
   HomeIcon,
   ChatBubbleLeftRightIcon,
   PlusCircleIcon,
-  ChartBarIcon,
+  ClockIcon,
   Cog6ToothIcon
 } from '@heroicons/react/24/outline'
 import {
   HomeIcon as HomeIconSolid,
   ChatBubbleLeftRightIcon as ChatIconSolid,
   PlusCircleIcon as PlusIconSolid,
-  ChartBarIcon as ChartIconSolid,
+  ClockIcon as ClockIconSolid,
   Cog6ToothIcon as CogIconSolid
 } from '@heroicons/react/24/solid'
 
@@ -24,7 +24,7 @@ const navItems: { id: Page; label: string; Icon: typeof HomeIcon; IconSolid: typ
   { id: 'dashboard', label: 'Home', Icon: HomeIcon, IconSolid: HomeIconSolid },
   { id: 'workout', label: 'Workout', Icon: ChatBubbleLeftRightIcon, IconSolid: ChatIconSolid },
   { id: 'log', label: 'Log', Icon: PlusCircleIcon, IconSolid: PlusIconSolid },
-  { id: 'progress', label: 'Progress', Icon: ChartBarIcon, IconSolid: ChartIconSolid },
+  { id: 'history', label: 'History', Icon: ClockIcon, IconSolid: ClockIconSolid },
   { id: 'settings', label: 'Settings', Icon: Cog6ToothIcon, IconSolid: CogIconSolid },
 ]
 

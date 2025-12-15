@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
+import { getDailyLog, getWorkouts } from '../lib/data-service'
+import { WeeklySummary } from '../components/WeeklySummary'
 
 interface DailyStats {
   weight?: number
@@ -6,12 +8,17 @@ interface DailyStats {
   calories?: number
   protein?: number
   sleep?: number
+  water?: number
   workoutCompleted?: boolean
+  workoutType?: string
 }
 
 export function Dashboard() {
   const [stats, setStats] = useState<DailyStats>({})
   const [greeting, setGreeting] = useState('')
+  const [showWeekly, setShowWeekly] = useState(false)
+
+  const today = useMemo(() => new Date().toISOString().split('T')[0], [])
 
   useEffect(() => {
     const hour = new Date().getHours()
@@ -19,18 +26,24 @@ export function Dashboard() {
     else if (hour < 18) setGreeting('Guten Tag')
     else setGreeting('Guten Abend')
 
-    // TODO: Load actual data from API/files
-    setStats({
-      weight: 82.5,
-      steps: 6432,
-      calories: 1850,
-      protein: 142,
-      sleep: 7.5,
-      workoutCompleted: true
-    })
-  }, [])
+    // Load data from service
+    const dailyLog = getDailyLog(today)
+    const workouts = getWorkouts()
+    const todayWorkout = workouts.find(w => w.date === today)
 
-  const today = new Date().toLocaleDateString('de-DE', {
+    setStats({
+      weight: dailyLog?.weight,
+      steps: dailyLog?.steps,
+      sleep: dailyLog?.sleep,
+      water: dailyLog?.water,
+      calories: 1850, // TODO: Calculate from nutrition
+      protein: 142,   // TODO: Calculate from nutrition
+      workoutCompleted: !!todayWorkout,
+      workoutType: todayWorkout?.type
+    })
+  }, [today])
+
+  const formattedDate = new Date().toLocaleDateString('de-DE', {
     weekday: 'long',
     day: 'numeric',
     month: 'long'
@@ -39,12 +52,24 @@ export function Dashboard() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-          {greeting}, Marc 👋
-        </h1>
-        <p className="text-gray-500 dark:text-gray-400">{today}</p>
+      <div className="flex items-start justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            {greeting}, Marc 👋
+          </h1>
+          <p className="text-gray-500 dark:text-gray-400">{formattedDate}</p>
+        </div>
+        <button
+          onClick={() => setShowWeekly(!showWeekly)}
+          className="p-2 text-gray-500 hover:text-health-primary transition-colors"
+          title="Wochenübersicht"
+        >
+          📊
+        </button>
       </div>
+
+      {/* Weekly Summary (toggleable) */}
+      {showWeekly && <WeeklySummary />}
 
       {/* Quick Stats Grid */}
       <div className="grid grid-cols-2 gap-4">
@@ -89,14 +114,16 @@ export function Dashboard() {
           <SummaryItem
             icon="🏋️"
             label="Training"
-            value={stats.workoutCompleted ? 'Torso - Erledigt' : 'Geplant: Torso'}
+            value={stats.workoutCompleted
+              ? `${stats.workoutType?.charAt(0).toUpperCase()}${stats.workoutType?.slice(1)} - Erledigt`
+              : 'Geplant: Torso'}
             status={stats.workoutCompleted ? 'good' : 'pending'}
           />
           <SummaryItem
             icon="💧"
             label="Wasser"
-            value="2.1 / 3L"
-            status="warning"
+            value={stats.water ? `${stats.water} / 3L` : '- / 3L'}
+            status={stats.water && stats.water >= 2.5 ? 'good' : 'warning'}
           />
         </div>
       </div>

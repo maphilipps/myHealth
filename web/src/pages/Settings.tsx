@@ -7,6 +7,8 @@ import {
   generateCommitMessage,
   getPendingChanges
 } from '../lib/git-integration'
+import { useTheme } from '../contexts/ThemeContext'
+import { SunIcon, MoonIcon, ComputerDesktopIcon } from '@heroicons/react/24/outline'
 
 export function Settings() {
   const [apiKey, setApiKey] = useState('')
@@ -14,6 +16,7 @@ export function Settings() {
   const [saved, setSaved] = useState(false)
   const [pendingCount, setPendingCount] = useState(0)
   const [commitMessage, setCommitMessage] = useState('')
+  const { theme, setTheme } = useTheme()
 
   useEffect(() => {
     setHasKey(hasApiKey())
@@ -94,6 +97,62 @@ export function Settings() {
           </div>
         </div>
       )}
+
+      {/* Appearance Section */}
+      <div className="card">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+          Erscheinungsbild
+        </h2>
+
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+              Farbschema
+            </label>
+            <div className="grid grid-cols-3 gap-2">
+              <button
+                onClick={() => setTheme('light')}
+                className={`flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-colors ${
+                  theme === 'light'
+                    ? 'border-health-primary bg-health-primary/5'
+                    : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                }`}
+              >
+                <SunIcon className={`w-6 h-6 ${theme === 'light' ? 'text-health-primary' : 'text-gray-500'}`} />
+                <span className={`text-sm ${theme === 'light' ? 'text-health-primary font-medium' : 'text-gray-600 dark:text-gray-400'}`}>
+                  Hell
+                </span>
+              </button>
+              <button
+                onClick={() => setTheme('dark')}
+                className={`flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-colors ${
+                  theme === 'dark'
+                    ? 'border-health-primary bg-health-primary/5'
+                    : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                }`}
+              >
+                <MoonIcon className={`w-6 h-6 ${theme === 'dark' ? 'text-health-primary' : 'text-gray-500'}`} />
+                <span className={`text-sm ${theme === 'dark' ? 'text-health-primary font-medium' : 'text-gray-600 dark:text-gray-400'}`}>
+                  Dunkel
+                </span>
+              </button>
+              <button
+                onClick={() => setTheme('system')}
+                className={`flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-colors ${
+                  theme === 'system'
+                    ? 'border-health-primary bg-health-primary/5'
+                    : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                }`}
+              >
+                <ComputerDesktopIcon className={`w-6 h-6 ${theme === 'system' ? 'text-health-primary' : 'text-gray-500'}`} />
+                <span className={`text-sm ${theme === 'system' ? 'text-health-primary font-medium' : 'text-gray-600 dark:text-gray-400'}`}>
+                  System
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* API Key Section */}
       <div className="card">
@@ -225,14 +284,14 @@ export function Settings() {
 
         <div className="space-y-3">
           <button className="w-full py-3 text-left px-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
-            <span className="font-medium">Apple Health Sync</span>
+            <span className="font-medium text-gray-900 dark:text-white">Apple Health Sync</span>
             <p className="text-sm text-gray-500 dark:text-gray-400">
               Importiere Daten aus Apple Health
             </p>
           </button>
 
           <button className="w-full py-3 text-left px-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
-            <span className="font-medium">Yazio Import</span>
+            <span className="font-medium text-gray-900 dark:text-white">Yazio Import</span>
             <p className="text-sm text-gray-500 dark:text-gray-400">
               Importiere Ernährungsdaten aus Yazio
             </p>
@@ -242,7 +301,7 @@ export function Settings() {
             onClick={handleExport}
             className="w-full py-3 text-left px-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
           >
-            <span className="font-medium">Daten exportieren</span>
+            <span className="font-medium text-gray-900 dark:text-white">Daten exportieren</span>
             <p className="text-sm text-gray-500 dark:text-gray-400">
               Alle Daten als YAML herunterladen
             </p>
@@ -260,7 +319,7 @@ export function Settings() {
           Um sie in Git zu committen:
         </p>
         <pre className="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg text-xs overflow-x-auto">
-          <code>
+          <code className="text-gray-800 dark:text-gray-200">
 {`cd ~/Documents/myHealth
 git add data/
 git commit -m "data: Update health data"`}
