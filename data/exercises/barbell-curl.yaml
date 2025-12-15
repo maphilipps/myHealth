@@ -1,0 +1,27 @@
+name: Barbell Curl
+category: arms
+muscle_groups:
+  primary: [biceps]
+  secondary: [forearms, brachialis]
+equipment: barbell
+type: isolation
+
+progression:
+  method: double_progression
+  rep_range: [8, 12]
+  weight_increment_kg: 1.25
+
+form_cues:
+  - "Schulterbreiter Griff"
+  - "Ellbogen am Körper fixiert"
+  - "Kontrolliert hochcurlen"
+  - "Volle Kontraktion oben"
+  - "Langsam ablassen (3 Sek)"
+  - "Kein Schwung mit dem Körper"
+
+variations:
+  - EZ-Bar Curl
+  - Dumbbell Curl
+  - Hammer Curl
+  - Preacher Curl
+  - Concentration Curl

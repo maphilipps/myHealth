@@ -1,0 +1,27 @@
+name: Overhead Press
+category: shoulders
+muscle_groups:
+  primary: [front_delts, side_delts]
+  secondary: [triceps, upper_chest, core]
+equipment: barbell
+type: compound
+
+progression:
+  method: double_progression
+  rep_range: [6, 10]
+  weight_increment_kg: 1.25
+
+form_cues:
+  - "Füße hüftbreit, stabil stehen"
+  - "Stange auf den Schultern, Ellbogen leicht vor der Stange"
+  - "Core anspannen, Gesäß anspannen"
+  - "Kopf zurücknehmen beim Drücken"
+  - "Lockout: Kopf durch, Arme gestreckt"
+  - "Kontrolliert absenken"
+
+variations:
+  - Push Press
+  - Seated Overhead Press
+  - Dumbbell Shoulder Press
+  - Arnold Press
+  - Z Press

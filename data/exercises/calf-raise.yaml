@@ -1,0 +1,27 @@
+name: Calf Raise
+category: legs
+muscle_groups:
+  primary: [calves]
+  secondary: []
+equipment: calf_raise_machine
+type: isolation
+
+progression:
+  method: double_progression
+  rep_range: [12, 20]
+  weight_increment_kg: 5
+
+form_cues:
+  - "Fußballen auf der Kante"
+  - "Volle Dehnung unten"
+  - "Maximale Kontraktion oben"
+  - "2 Sek halten oben"
+  - "Langsam ablassen"
+  - "Knie leicht gebeugt für Soleus"
+
+variations:
+  - Standing Calf Raise
+  - Seated Calf Raise
+  - Single-Leg Calf Raise
+  - Donkey Calf Raise
+  - Leg Press Calf Raise

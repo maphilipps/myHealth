@@ -1,11 +1,13 @@
 import { useState, useRef, useEffect } from 'react'
 import { PaperAirplaneIcon, CameraIcon } from '@heroicons/react/24/solid'
+import { sendMessage, analyzeWorkoutImage, hasApiKey, type Message as ApiMessage } from '../lib/claude-api'
 
 interface Message {
   id: string
   role: 'user' | 'assistant'
   content: string
   timestamp: Date
+  imageUrl?: string
 }
 
 export function WorkoutChat() {
@@ -19,7 +21,13 @@ export function WorkoutChat() {
   ])
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [apiConfigured, setApiConfigured] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    setApiConfigured(hasApiKey())
+  }, [])
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -43,18 +51,110 @@ export function WorkoutChat() {
     setInput('')
     setIsLoading(true)
 
-    // TODO: Connect to Claude API
-    // Simulate response for now
-    setTimeout(() => {
-      const assistantMessage: Message = {
+    try {
+      if (apiConfigured) {
+        // Use real Claude API
+        const apiMessages: ApiMessage[] = messages
+          .filter(m => m.id !== '1') // Skip initial greeting
+          .map(m => ({ role: m.role, content: m.content }))
+        apiMessages.push({ role: 'user', content: input })
+
+        const response = await sendMessage(apiMessages)
+
+        const assistantMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          role: 'assistant',
+          content: response,
+          timestamp: new Date()
+        }
+        setMessages(prev => [...prev, assistantMessage])
+      } else {
+        // Fallback to simulated response
+        setTimeout(() => {
+          const assistantMessage: Message = {
+            id: (Date.now() + 1).toString(),
+            role: 'assistant',
+            content: getSimulatedResponse(input),
+            timestamp: new Date()
+          }
+          setMessages(prev => [...prev, assistantMessage])
+        }, 1000)
+      }
+    } catch (error) {
+      const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: getSimulatedResponse(input),
+        content: `Fehler: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}. Bitte prüfe deine API-Einstellungen.`,
         timestamp: new Date()
       }
-      setMessages(prev => [...prev, assistantMessage])
+      setMessages(prev => [...prev, errorMessage])
+    } finally {
       setIsLoading(false)
-    }, 1000)
+    }
+  }
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // Create preview URL
+    const imageUrl = URL.createObjectURL(file)
+
+    // Convert to base64
+    const reader = new FileReader()
+    reader.onload = async () => {
+      const base64 = (reader.result as string).split(',')[1]
+
+      const userMessage: Message = {
+        id: Date.now().toString(),
+        role: 'user',
+        content: '📷 Workout-Foto hochgeladen',
+        timestamp: new Date(),
+        imageUrl
+      }
+
+      setMessages(prev => [...prev, userMessage])
+      setIsLoading(true)
+
+      try {
+        if (apiConfigured) {
+          const response = await analyzeWorkoutImage(base64)
+          const assistantMessage: Message = {
+            id: (Date.now() + 1).toString(),
+            role: 'assistant',
+            content: response,
+            timestamp: new Date()
+          }
+          setMessages(prev => [...prev, assistantMessage])
+        } else {
+          setTimeout(() => {
+            const assistantMessage: Message = {
+              id: (Date.now() + 1).toString(),
+              role: 'assistant',
+              content: 'Um Fotos zu analysieren, konfiguriere bitte deinen API Key in den Einstellungen.',
+              timestamp: new Date()
+            }
+            setMessages(prev => [...prev, assistantMessage])
+          }, 500)
+        }
+      } catch (error) {
+        const errorMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          role: 'assistant',
+          content: `Fehler bei der Bildanalyse: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`,
+          timestamp: new Date()
+        }
+        setMessages(prev => [...prev, errorMessage])
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    reader.readAsDataURL(file)
+
+    // Reset input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
   }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -73,9 +173,21 @@ export function WorkoutChat() {
         </div>
         <div>
           <h1 className="font-semibold text-gray-900 dark:text-white">Workout Coach</h1>
-          <p className="text-sm text-green-500">Online</p>
+          <p className={`text-sm ${apiConfigured ? 'text-green-500' : 'text-amber-500'}`}>
+            {apiConfigured ? 'Online (Claude API)' : 'Demo-Modus'}
+          </p>
         </div>
       </div>
+
+      {/* API Warning */}
+      {!apiConfigured && (
+        <div className="mt-2 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+          <p className="text-sm text-amber-700 dark:text-amber-400">
+            Für volle Funktionalität, konfiguriere deinen API Key in den{' '}
+            <span className="font-medium">Einstellungen</span>.
+          </p>
+        </div>
+      )}
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto py-4 space-y-4">
@@ -89,6 +201,13 @@ export function WorkoutChat() {
                 message.role === 'user' ? 'chat-bubble-user' : 'chat-bubble-assistant'
               }`}
             >
+              {message.imageUrl && (
+                <img
+                  src={message.imageUrl}
+                  alt="Workout"
+                  className="rounded-lg mb-2 max-w-full max-h-48 object-cover"
+                />
+              )}
               <p className="whitespace-pre-wrap">{message.content}</p>
               <p className="text-xs opacity-60 mt-1">
                 {message.timestamp.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}
@@ -113,7 +232,16 @@ export function WorkoutChat() {
       {/* Input */}
       <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
         <div className="flex items-end gap-2">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            capture="environment"
+            onChange={handleImageUpload}
+            className="hidden"
+          />
           <button
+            onClick={() => fileInputRef.current?.click()}
             className="p-3 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
             title="Foto aufnehmen"
           >

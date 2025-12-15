@@ -1,0 +1,85 @@
+name: Upper Lower
+description: 4-day upper/lower split for intermediate lifters
+created: 2024-12-15
+active: false
+
+schedule:
+  - day: monday
+    type: upper
+  - day: tuesday
+    type: lower
+  - day: wednesday
+    type: rest
+  - day: thursday
+    type: upper
+  - day: friday
+    type: lower
+  - day: saturday
+    type: rest
+  - day: sunday
+    type: rest
+
+workouts:
+  upper:
+    focus: "Oberkörper komplett"
+    exercises:
+      - name: Bench Press
+        sets: 4
+        rep_range: [6, 8]
+        rest_sec: 180
+      - name: Barbell Row
+        sets: 4
+        rep_range: [6, 8]
+        rest_sec: 150
+      - name: Overhead Press
+        sets: 3
+        rep_range: [8, 10]
+        rest_sec: 120
+      - name: Pull-Up
+        sets: 3
+        rep_range: [6, 10]
+        rest_sec: 120
+      - name: Incline Bench Press
+        sets: 3
+        rep_range: [10, 12]
+        rest_sec: 90
+      - name: Face Pull
+        sets: 3
+        rep_range: [15, 20]
+        rest_sec: 60
+      - name: Barbell Curl
+        sets: 2
+        rep_range: [10, 12]
+        rest_sec: 60
+      - name: Tricep Pushdown
+        sets: 2
+        rep_range: [10, 12]
+        rest_sec: 60
+
+  lower:
+    focus: "Unterkörper komplett"
+    exercises:
+      - name: Squat
+        sets: 4
+        rep_range: [6, 8]
+        rest_sec: 180
+      - name: Romanian Deadlift
+        sets: 4
+        rep_range: [8, 10]
+        rest_sec: 150
+      - name: Leg Press
+        sets: 3
+        rep_range: [10, 12]
+        rest_sec: 120
+      - name: Leg Curl
+        sets: 3
+        rep_range: [10, 12]
+        rest_sec: 90
+      - name: Calf Raise
+        sets: 4
+        rep_range: [12, 15]
+        rest_sec: 60
+
+progression:
+  type: intelligent
+  deload_frequency_weeks: 4

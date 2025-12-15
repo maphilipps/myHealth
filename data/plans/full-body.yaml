@@ -1,0 +1,109 @@
+name: Full Body
+description: 3-day full body program for beginners/intermediates
+created: 2024-12-15
+active: false
+
+schedule:
+  - day: monday
+    type: full_body_a
+  - day: tuesday
+    type: rest
+  - day: wednesday
+    type: full_body_b
+  - day: thursday
+    type: rest
+  - day: friday
+    type: full_body_c
+  - day: saturday
+    type: rest
+  - day: sunday
+    type: rest
+
+workouts:
+  full_body_a:
+    focus: "Squat-fokussiert"
+    exercises:
+      - name: Squat
+        sets: 4
+        rep_range: [6, 8]
+        rest_sec: 180
+      - name: Bench Press
+        sets: 4
+        rep_range: [6, 8]
+        rest_sec: 150
+      - name: Barbell Row
+        sets: 4
+        rep_range: [8, 10]
+        rest_sec: 120
+      - name: Overhead Press
+        sets: 3
+        rep_range: [8, 10]
+        rest_sec: 120
+      - name: Barbell Curl
+        sets: 2
+        rep_range: [10, 12]
+        rest_sec: 60
+      - name: Face Pull
+        sets: 2
+        rep_range: [15, 20]
+        rest_sec: 60
+
+  full_body_b:
+    focus: "Deadlift-fokussiert"
+    exercises:
+      - name: Deadlift
+        sets: 3
+        rep_range: [5, 6]
+        rest_sec: 240
+      - name: Incline Bench Press
+        sets: 4
+        rep_range: [8, 10]
+        rest_sec: 120
+      - name: Pull-Up
+        sets: 4
+        rep_range: [6, 10]
+        rest_sec: 120
+      - name: Leg Press
+        sets: 3
+        rep_range: [10, 12]
+        rest_sec: 90
+      - name: Lateral Raise
+        sets: 3
+        rep_range: [12, 15]
+        rest_sec: 60
+      - name: Tricep Pushdown
+        sets: 2
+        rep_range: [12, 15]
+        rest_sec: 60
+
+  full_body_c:
+    focus: "Volumen-Tag"
+    exercises:
+      - name: Squat
+        sets: 3
+        rep_range: [8, 10]
+        rest_sec: 150
+      - name: Romanian Deadlift
+        sets: 3
+        rep_range: [10, 12]
+        rest_sec: 120
+      - name: Dip
+        sets: 3
+        rep_range: [8, 12]
+        rest_sec: 90
+      - name: Lat Pulldown
+        sets: 3
+        rep_range: [10, 12]
+        rest_sec: 90
+      - name: Leg Curl
+        sets: 3
+        rep_range: [12, 15]
+        rest_sec: 60
+      - name: Calf Raise
+        sets: 3
+        rep_range: [15, 20]
+        rest_sec: 60
+
+progression:
+  type: intelligent
+  deload_frequency_weeks: 4

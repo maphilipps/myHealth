@@ -1,0 +1,27 @@
+name: Leg Press
+category: legs
+muscle_groups:
+  primary: [quadriceps, glutes]
+  secondary: [hamstrings]
+equipment: leg_press_machine
+type: compound
+
+progression:
+  method: double_progression
+  rep_range: [10, 15]
+  weight_increment_kg: 5
+
+form_cues:
+  - "Füße schulterbreit auf der Platte"
+  - "Unterer Rücken am Polster"
+  - "Knie nicht über Zehen"
+  - "Volle ROM ohne Po abheben"
+  - "Knie nicht komplett durchdrücken"
+  - "Kontrolliert ablassen"
+
+variations:
+  - High Foot Placement (Glutes)
+  - Low Foot Placement (Quads)
+  - Narrow Stance
+  - Wide Stance
+  - Single-Leg Press

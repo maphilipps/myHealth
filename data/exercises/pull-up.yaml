@@ -1,0 +1,27 @@
+name: Pull-Up
+category: back
+muscle_groups:
+  primary: [lats, biceps]
+  secondary: [rear_delts, rhomboids, forearms]
+equipment: pull_up_bar
+type: compound
+
+progression:
+  method: double_progression
+  rep_range: [6, 12]
+  weight_increment_kg: 2.5  # für weighted pull-ups
+
+form_cues:
+  - "Schulterbreiter Griff, Handflächen weg"
+  - "Schultern nach unten ziehen (Depression)"
+  - "Brust zur Stange ziehen"
+  - "Ellbogen nach unten und hinten"
+  - "Volle Streckung unten"
+  - "Kein Schwung, kontrollierte Bewegung"
+
+variations:
+  - Chin-Up
+  - Weighted Pull-Up
+  - Neutral Grip Pull-Up
+  - Wide Grip Pull-Up
+  - Assisted Pull-Up

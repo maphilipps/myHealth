@@ -1,0 +1,27 @@
+name: Squat
+category: legs
+muscle_groups:
+  primary: [quadriceps, glutes]
+  secondary: [hamstrings, core, lower_back]
+equipment: barbell
+type: compound
+
+progression:
+  method: double_progression
+  rep_range: [6, 10]
+  weight_increment_kg: 2.5
+
+form_cues:
+  - "Füße schulterbreit, Zehen leicht nach außen"
+  - "Brust raus, Blick geradeaus"
+  - "Knie folgen den Zehen"
+  - "Tiefe: mindestens parallel"
+  - "Gewicht auf der ganzen Fußfläche"
+  - "Core anspannen"
+
+variations:
+  - Front Squat
+  - Goblet Squat
+  - Bulgarian Split Squat
+  - Pause Squat
+  - Box Squat

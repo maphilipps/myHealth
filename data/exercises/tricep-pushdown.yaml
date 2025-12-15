@@ -1,0 +1,27 @@
+name: Tricep Pushdown
+category: arms
+muscle_groups:
+  primary: [triceps]
+  secondary: []
+equipment: cable_machine
+type: isolation
+
+progression:
+  method: double_progression
+  rep_range: [10, 15]
+  weight_increment_kg: 2.5
+
+form_cues:
+  - "Oberarme am Körper fixiert"
+  - "Nur Unterarme bewegen"
+  - "Volle Extension unten"
+  - "Kurz halten und anspannen"
+  - "Kontrolliert zurückführen"
+  - "Kein Schwung"
+
+variations:
+  - Rope Pushdown
+  - V-Bar Pushdown
+  - Reverse Grip Pushdown
+  - Single-Arm Pushdown
+  - Overhead Extension

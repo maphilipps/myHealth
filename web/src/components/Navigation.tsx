@@ -2,16 +2,18 @@ import {
   HomeIcon,
   ChatBubbleLeftRightIcon,
   PlusCircleIcon,
-  FireIcon
+  FireIcon,
+  Cog6ToothIcon
 } from '@heroicons/react/24/outline'
 import {
   HomeIcon as HomeIconSolid,
   ChatBubbleLeftRightIcon as ChatIconSolid,
   PlusCircleIcon as PlusIconSolid,
-  FireIcon as FireIconSolid
+  FireIcon as FireIconSolid,
+  Cog6ToothIcon as CogIconSolid
 } from '@heroicons/react/24/solid'
 
-type Page = 'dashboard' | 'workout' | 'log' | 'nutrition'
+type Page = 'dashboard' | 'workout' | 'log' | 'nutrition' | 'settings'
 
 interface NavigationProps {
   currentPage: Page
@@ -23,6 +25,7 @@ const navItems: { id: Page; label: string; Icon: typeof HomeIcon; IconSolid: typ
   { id: 'workout', label: 'Workout', Icon: ChatBubbleLeftRightIcon, IconSolid: ChatIconSolid },
   { id: 'log', label: 'Log', Icon: PlusCircleIcon, IconSolid: PlusIconSolid },
   { id: 'nutrition', label: 'Nutrition', Icon: FireIcon, IconSolid: FireIconSolid },
+  { id: 'settings', label: 'Settings', Icon: Cog6ToothIcon, IconSolid: CogIconSolid },
 ]
 
 export function Navigation({ currentPage, onNavigate }: NavigationProps) {

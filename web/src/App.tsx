@@ -4,8 +4,9 @@ import { Dashboard } from './pages/Dashboard'
 import { WorkoutChat } from './pages/WorkoutChat'
 import { QuickLog } from './pages/QuickLog'
 import { Nutrition } from './pages/Nutrition'
+import { Settings } from './pages/Settings'
 
-type Page = 'dashboard' | 'workout' | 'log' | 'nutrition'
+type Page = 'dashboard' | 'workout' | 'log' | 'nutrition' | 'settings'
 
 function App() {
   const [currentPage, setCurrentPage] = useState<Page>('dashboard')
@@ -20,6 +21,8 @@ function App() {
         return <QuickLog />
       case 'nutrition':
         return <Nutrition />
+      case 'settings':
+        return <Settings />
       default:
         return <Dashboard />
     }

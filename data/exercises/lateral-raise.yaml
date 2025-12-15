@@ -1,0 +1,27 @@
+name: Lateral Raise
+category: shoulders
+muscle_groups:
+  primary: [side_delts]
+  secondary: [traps]
+equipment: dumbbells
+type: isolation
+
+progression:
+  method: double_progression
+  rep_range: [12, 20]
+  weight_increment_kg: 1
+
+form_cues:
+  - "Leichte Beugung in Ellbogen"
+  - "Arme bis Schulterhöhe heben"
+  - "Kleiner Finger leicht höher"
+  - "Kontrolliert ablassen"
+  - "Kein Schwung"
+  - "Spannung halten"
+
+variations:
+  - Cable Lateral Raise
+  - Machine Lateral Raise
+  - Leaning Lateral Raise
+  - Behind-Back Cable Raise
+  - Lu Raise

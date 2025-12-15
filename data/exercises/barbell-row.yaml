@@ -1,0 +1,27 @@
+name: Barbell Row
+category: back
+muscle_groups:
+  primary: [lats, rhomboids, rear_delts]
+  secondary: [biceps, lower_back, traps]
+equipment: barbell
+type: compound
+
+progression:
+  method: double_progression
+  rep_range: [8, 12]
+  weight_increment_kg: 2.5
+
+form_cues:
+  - "Oberkörper ca. 45 Grad vorgebeugt"
+  - "Rücken gerade, Core angespannt"
+  - "Stange zu Bauchnabel ziehen"
+  - "Ellbogen eng am Körper"
+  - "Schulterblätter zusammenziehen"
+  - "Kontrolliert ablassen, volle Streckung"
+
+variations:
+  - Pendlay Row
+  - Yates Row
+  - Dumbbell Row
+  - T-Bar Row
+  - Seal Row

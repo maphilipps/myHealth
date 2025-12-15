@@ -1,0 +1,27 @@
+name: Lat Pulldown
+category: back
+muscle_groups:
+  primary: [lats]
+  secondary: [biceps, rear_delts, rhomboids]
+equipment: cable_machine
+type: compound
+
+progression:
+  method: double_progression
+  rep_range: [10, 12]
+  weight_increment_kg: 2.5
+
+form_cues:
+  - "Schulterbreiter Griff"
+  - "Brust raus, leichtes Hohlkreuz"
+  - "Stange zur oberen Brust ziehen"
+  - "Ellbogen nach unten und hinten"
+  - "Schulterblätter zusammenziehen"
+  - "Kontrolliert zurückführen"
+
+variations:
+  - Close Grip Pulldown
+  - Wide Grip Pulldown
+  - Reverse Grip Pulldown
+  - Single-Arm Pulldown
+  - Straight-Arm Pulldown

@@ -1,0 +1,27 @@
+name: Deadlift
+category: back
+muscle_groups:
+  primary: [lower_back, glutes, hamstrings]
+  secondary: [traps, forearms, core]
+equipment: barbell
+type: compound
+
+progression:
+  method: double_progression
+  rep_range: [5, 8]
+  weight_increment_kg: 2.5
+
+form_cues:
+  - "Stange über Mittelfuß"
+  - "Schulterblätter über der Stange"
+  - "Rücken gerade, neutrale Wirbelsäule"
+  - "Stange eng am Körper führen"
+  - "Hüfte und Schultern gleichzeitig heben"
+  - "Lockout: Hüfte nach vorne, Schultern zurück"
+
+variations:
+  - Romanian Deadlift
+  - Sumo Deadlift
+  - Trap Bar Deadlift
+  - Deficit Deadlift
+  - Rack Pull

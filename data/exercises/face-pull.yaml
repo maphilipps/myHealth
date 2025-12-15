@@ -1,0 +1,27 @@
+name: Face Pull
+category: shoulders
+muscle_groups:
+  primary: [rear_delts, external_rotators]
+  secondary: [rhomboids, traps]
+equipment: cable_machine
+type: isolation
+
+progression:
+  method: double_progression
+  rep_range: [15, 20]
+  weight_increment_kg: 2.5
+
+form_cues:
+  - "Seil auf Gesichtshöhe"
+  - "Ellbogen hoch, nach außen"
+  - "Zum Gesicht ziehen"
+  - "Externe Rotation am Ende"
+  - "Schulterblätter zusammen"
+  - "Langsam zurückführen"
+
+variations:
+  - Band Face Pull
+  - Prone Y-Raise
+  - Rear Delt Fly
+  - Cable External Rotation
+  - Band Pull-Apart

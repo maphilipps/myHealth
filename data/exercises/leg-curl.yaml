@@ -1,0 +1,27 @@
+name: Leg Curl
+category: legs
+muscle_groups:
+  primary: [hamstrings]
+  secondary: [calves]
+equipment: leg_curl_machine
+type: isolation
+
+progression:
+  method: double_progression
+  rep_range: [10, 15]
+  weight_increment_kg: 2.5
+
+form_cues:
+  - "Polster knapp über Fersen"
+  - "Hüfte auf dem Polster halten"
+  - "Volle Kontraktion"
+  - "Kurz halten oben"
+  - "Kontrolliert ablassen"
+  - "Nicht komplett entspannen"
+
+variations:
+  - Lying Leg Curl
+  - Seated Leg Curl
+  - Standing Leg Curl
+  - Nordic Curl
+  - Slider Leg Curl

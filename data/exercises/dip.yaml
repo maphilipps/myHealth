@@ -1,0 +1,27 @@
+name: Dip
+category: chest
+muscle_groups:
+  primary: [chest, triceps]
+  secondary: [front_delts]
+equipment: dip_bars
+type: compound
+
+progression:
+  method: double_progression
+  rep_range: [8, 15]
+  weight_increment_kg: 2.5  # für weighted dips
+
+form_cues:
+  - "Leichte Vorneigung für Brust-Fokus"
+  - "Ellbogen 45-60 Grad vom Körper"
+  - "Tiefe: Oberarm parallel zum Boden"
+  - "Schultern unten halten"
+  - "Kontrolliert absenken"
+  - "Volle Extension oben"
+
+variations:
+  - Weighted Dip
+  - Bench Dip
+  - Ring Dip
+  - Assisted Dip
+  - Tricep Dip (aufrecht)

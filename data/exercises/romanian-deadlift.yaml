@@ -1,0 +1,28 @@
+name: Romanian Deadlift
+category: legs
+muscle_groups:
+  primary: [hamstrings, glutes]
+  secondary: [lower_back, forearms]
+equipment: barbell
+type: compound
+
+progression:
+  method: double_progression
+  rep_range: [8, 12]
+  weight_increment_kg: 2.5
+
+form_cues:
+  - "Füße hüftbreit"
+  - "Knie leicht gebeugt, fixiert"
+  - "Hüfte nach hinten schieben"
+  - "Rücken gerade halten"
+  - "Stange eng am Körper"
+  - "Dehnung in Hamstrings spüren"
+  - "Hüfte nach vorne für Lockout"
+
+variations:
+  - Single-Leg RDL
+  - Dumbbell RDL
+  - Stiff-Leg Deadlift
+  - Good Morning
+  - Cable Pull-Through

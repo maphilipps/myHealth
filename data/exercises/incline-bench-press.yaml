@@ -1,0 +1,27 @@
+name: Incline Bench Press
+category: chest
+muscle_groups:
+  primary: [upper_chest, front_delts]
+  secondary: [triceps]
+equipment: barbell
+type: compound
+
+progression:
+  method: double_progression
+  rep_range: [8, 12]
+  weight_increment_kg: 2.5
+
+form_cues:
+  - "Bank auf 30-45 Grad"
+  - "Schulterblätter zusammen und runter"
+  - "Füße fest am Boden"
+  - "Stange zur oberen Brust senken"
+  - "Ellbogen ca. 45 Grad"
+  - "Volle ROM"
+
+variations:
+  - Dumbbell Incline Press
+  - Smith Machine Incline
+  - Incline Fly
+  - Low Incline Press
+  - Reverse Grip Incline
