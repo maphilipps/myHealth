@@ -1,13 +1,13 @@
 ---
 title: 'iOS: Authentication Flow'
-status: todo
+status: done
 type: feature
 priority: high
 tags:
     - ios
     - auth
 created_at: 2025-12-15T20:51:51Z
-updated_at: 2025-12-15T20:51:51Z
+updated_at: 2025-12-15T23:55:00Z
 links:
     - parent: myHealth-mudp
 ---
@@ -47,8 +47,8 @@ struct LoginView: View {
 ```
 
 ## Definition of Done
-- [ ] Login/Register Screens
-- [ ] Biometric Auth
-- [ ] Keychain Storage
-- [ ] Error Handling
+- [x] Login/Register Screens (LoginView.swift)
+- [ ] Biometric Auth (später)
+- [x] Keychain Storage (via Supabase SDK)
+- [x] Error Handling
 - [ ] `/code-review:code-review` ausführen

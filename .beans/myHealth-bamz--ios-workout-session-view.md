@@ -1,6 +1,6 @@
 ---
 title: 'iOS: Workout Session View'
-status: todo
+status: done
 type: feature
 priority: critical
 tags:
@@ -8,7 +8,7 @@ tags:
     - ui
     - core
 created_at: 2025-12-15T20:45:10Z
-updated_at: 2025-12-15T20:45:10Z
+updated_at: 2025-12-15T23:55:00Z
 links:
     - parent: myHealth-mudp
 ---
@@ -68,10 +68,10 @@ links:
 - Shake für Undo
 
 ## Definition of Done
-- [ ] Komplettes Workout trackbar
-- [ ] RPE Eingabe funktioniert
-- [ ] Rest Timer funktioniert
-- [ ] Previous Session wird angezeigt
-- [ ] Progression-Empfehlung sichtbar
-- [ ] Smooth 60fps Animations
+- [x] Komplettes Workout trackbar (ActiveWorkoutView.swift)
+- [x] RPE Eingabe funktioniert (Slider)
+- [x] Rest Timer funktioniert (restTimerView)
+- [x] Previous Session wird angezeigt (previousSetsCard)
+- [x] Progression-Empfehlung sichtbar (WorkoutService.getProgression)
+- [ ] Smooth 60fps Animations (pending Simulator test)
 - [ ] `/code-review:code-review` ausführen

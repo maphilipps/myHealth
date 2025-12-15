@@ -59,8 +59,8 @@ myHealth/
 6. GitHub Repo erstellen und pushen
 
 ## Definition of Done
-- [ ] Projekt kompiliert
-- [ ] Basic Navigation funktioniert
-- [ ] HealthKit Capability aktiviert
-- [ ] Repo auf GitHub
+- [x] Projekt kompiliert
+- [x] Basic Navigation funktioniert
+- [x] HealthKit Capability aktiviert
+- [x] Repo auf GitHub: https://github.com/maphilipps/myhealth-ios
 - [ ] `/code-review:code-review` ausführen

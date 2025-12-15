@@ -1,6 +1,6 @@
 ---
 title: iOS App - SwiftUI Native
-status: todo
+status: in_progress
 type: epic
 priority: high
 tags:
@@ -8,7 +8,7 @@ tags:
     - swiftui
     - supabase
 created_at: 2025-12-15T20:44:34Z
-updated_at: 2025-12-15T22:00:00Z
+updated_at: 2025-12-15T23:55:00Z
 links:
     - parent: myHealth-a122
     - blocked_by: myHealth-sb01
@@ -20,7 +20,7 @@ links:
 Native iOS App mit SwiftUI für Workout-Tracking. Nutzt **Supabase** als Backend (statt CloudKit/iCloud).
 
 ## Repository
-`myhealth-ios` - Separates Xcode Projekt
+`myhealth-ios` - Separates Xcode Projekt auf GitHub: https://github.com/maphilipps/myhealth-ios
 
 ## Technologie-Stack
 - SwiftUI (iOS 17+)
@@ -39,21 +39,22 @@ Native iOS App mit SwiftUI für Workout-Tracking. Nutzt **Supabase** als Backend
 ## Features
 
 ### Core
-- [ ] Workout Session Tracking mit RPE
-- [ ] Progressive Overload Anzeige (via Supabase Function)
-- [ ] Exercise Library (aus Supabase)
+- [x] Workout Session Tracking mit RPE (ActiveWorkoutView)
+- [x] Progressive Overload Anzeige (via Supabase Function)
+- [x] Exercise Library (aus Supabase)
 - [ ] Training Plans
 
 ### Auth
-- [ ] Sign in with Apple (via Supabase)
-- [ ] Session Persistence
-- [ ] Secure Token Storage (Keychain)
+- [x] Email/Password Login (via Supabase)
+- [ ] Sign in with Apple (vorbereitet, später aktivieren)
+- [x] Session Persistence
+- [x] Secure Token Storage (Keychain via Supabase SDK)
 
 ### HealthKit
-- [ ] Schritte importieren → daily_logs
-- [ ] Herzfrequenz importieren
-- [ ] Schlaf importieren
-- [ ] Gewicht sync (bidirektional)
+- [x] Schritte importieren → vitals
+- [x] Herzfrequenz importieren
+- [x] Schlaf importieren
+- [x] Gewicht sync (bidirektional)
 
 ### Agent Integration
 - [ ] Chat mit Fitness Coach (API Call zu Agent SDK)

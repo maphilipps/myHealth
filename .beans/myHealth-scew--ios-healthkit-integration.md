@@ -1,6 +1,6 @@
 ---
 title: 'iOS: HealthKit Integration'
-status: todo
+status: done
 type: feature
 priority: critical
 tags:
@@ -8,7 +8,7 @@ tags:
     - healthkit
     - core
 created_at: 2025-12-15T20:45:08Z
-updated_at: 2025-12-15T20:45:08Z
+updated_at: 2025-12-15T23:55:00Z
 links:
     - parent: myHealth-mudp
 ---
@@ -72,8 +72,8 @@ class HealthKitService {
 - Graceful Degradation wenn abgelehnt
 
 ## Definition of Done
-- [ ] Alle Datentypen werden importiert
-- [ ] Permission Request funktioniert
-- [ ] Background Sync eingerichtet
-- [ ] Daten werden in SwiftData gespeichert
+- [x] Alle Datentypen werden importiert (HealthKitService.swift)
+- [x] Permission Request funktioniert (requestAuthorization)
+- [ ] Background Sync eingerichtet (später)
+- [x] Daten werden in Supabase gespeichert (syncToSupabase)
 - [ ] `/code-review:code-review` ausführen

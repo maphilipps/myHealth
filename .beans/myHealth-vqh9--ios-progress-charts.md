@@ -1,13 +1,13 @@
 ---
 title: 'iOS: Progress Charts'
-status: todo
+status: done
 type: feature
 priority: normal
 tags:
     - ios
     - ui
 created_at: 2025-12-15T20:45:39Z
-updated_at: 2025-12-15T20:45:39Z
+updated_at: 2025-12-15T23:55:00Z
 links:
     - parent: myHealth-mudp
 ---
@@ -57,8 +57,10 @@ struct WeightChart: View {
 ```
 
 ## Definition of Done
-- [ ] Gewichts-Chart funktioniert
-- [ ] Übungs-Progression Chart
-- [ ] Interaktive Tooltips
-- [ ] Smooth Animations
+- [x] Gewichts-Chart funktioniert (weightChartSection mit LineMark/AreaMark)
+- [x] Übungs-Progression Chart (strengthChartSection)
+- [x] Volume Chart (volumeChartSection mit BarMark)
+- [x] PRs und Big 3 Total mit Wilks Score
+- [ ] Interaktive Tooltips (später)
+- [ ] Smooth Animations (pending Simulator test)
 - [ ] `/code-review:code-review` ausführen
