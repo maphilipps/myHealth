@@ -1,0 +1,17 @@
+{
+  "name": "myhealth",
+  "version": "0.1.0",
+  "description": "Personal Health Tracking System - Workout coaching mit Progressive Overload, Ernährung, Vitaldaten. YAML-basiert mit Git-Versionierung.",
+  "author": {
+    "name": "Marc Philipps",
+    "email": "marc.philipps@adesso.de"
+  },
+  "keywords": [
+    "health",
+    "fitness",
+    "workout",
+    "nutrition",
+    "tracking",
+    "progressive-overload"
+  ]
+}
