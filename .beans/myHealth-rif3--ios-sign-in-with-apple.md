@@ -45,3 +45,4 @@ struct AppleSignInButton: View {
 - [ ] Server Token Validation
 - [ ] Account Linking
 - [ ] App Store Compliance
+- [ ] `/code-review:code-review` ausführen

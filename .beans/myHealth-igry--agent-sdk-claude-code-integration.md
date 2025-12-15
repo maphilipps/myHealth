@@ -54,3 +54,4 @@ Erstelle Skills in `~/.claude/skills/`:
 - [ ] Claude Code erkennt myHealth Tools
 - [ ] Skills funktionieren korrekt
 - [ ] Dokumentation vollständig
+- [ ] `/code-review:code-review` ausführen

@@ -58,3 +58,4 @@ Analysiert Fortschritt über einen Zeitraum und liefert Insights, Trends und Emp
 - [ ] Trend-Erkennung funktioniert
 - [ ] Insights sind actionable
 - [ ] Performance bei großen Datensätzen okay
+- [ ] `/code-review:code-review` ausführen

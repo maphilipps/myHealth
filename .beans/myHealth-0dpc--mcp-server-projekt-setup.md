@@ -40,3 +40,4 @@ npx tsc --init
 - [ ] `npm install` funktioniert
 - [ ] `npm run build` kompiliert ohne Fehler
 - [ ] Basic MCP Server startet
+- [ ] `/code-review:code-review` ausführen

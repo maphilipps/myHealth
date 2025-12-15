@@ -26,3 +26,6 @@ Ein funktionierender Fitness-Tracker der Fitbod ersetzt, mit intelligenter Progr
 - Xcode installiert
 - Claude API Key
 - Apple Developer Account (für TestFlight)
+
+## Nach Abschluss
+- [ ] `/code-review:code-review` ausführen

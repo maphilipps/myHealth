@@ -49,3 +49,4 @@ npx @myhealth/mcp-server --data-dir ~/myHealth/data
 - [ ] README dokumentiert alle Tools und Resources
 - [ ] CLI startet Server korrekt
 - [ ] Bereit für `npm publish`
+- [ ] `/code-review:code-review` ausführen

@@ -80,3 +80,4 @@ const fitnessCoach = server.registerTool(
 - [ ] Progression-Empfehlungen sind korrekt
 - [ ] Natural Language Input wird verstanden
 - [ ] Context zwischen Sätzen bleibt erhalten
+- [ ] `/code-review:code-review` ausführen

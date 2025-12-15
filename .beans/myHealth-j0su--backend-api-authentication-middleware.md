@@ -45,3 +45,4 @@ router.get('/workouts', authMiddleware, requireRole('user'), ...);
 - [ ] RBAC funktioniert
 - [ ] API Key für Services
 - [ ] Unit Tests
+- [ ] `/code-review:code-review` ausführen

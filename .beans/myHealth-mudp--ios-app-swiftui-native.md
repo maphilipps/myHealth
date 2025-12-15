@@ -5,57 +5,98 @@ type: epic
 priority: high
 tags:
     - ios
-    - frontend
+    - swiftui
+    - supabase
 created_at: 2025-12-15T20:44:34Z
-updated_at: 2025-12-15T20:44:34Z
+updated_at: 2025-12-15T22:00:00Z
 links:
     - parent: myHealth-a122
+    - blocked_by: myHealth-sb01
 ---
 
 # iOS App - SwiftUI Native
 
 ## Beschreibung
-Native iOS App mit SwiftUI für Workout-Tracking, HealthKit-Integration und Agent-Kommunikation.
+Native iOS App mit SwiftUI für Workout-Tracking. Nutzt **Supabase** als Backend (statt CloudKit/iCloud).
 
 ## Repository
 `myhealth-ios` - Separates Xcode Projekt
 
 ## Technologie-Stack
 - SwiftUI (iOS 17+)
-- SwiftData für lokale Persistenz
+- **Supabase Swift SDK** (`supabase-swift`) ← NEU
 - HealthKit für Apple Health Integration
-- CloudKit/iCloud Drive für Sync
 - Swift Charts für Visualisierung
-- URLSession + async/await für API Calls
+- Async/Await für Networking
+
+## Änderungen vs. ursprünglicher Plan
+| Ursprünglich | Jetzt |
+|--------------|-------|
+| SwiftData + CloudKit | Supabase PostgreSQL |
+| iCloud Sync | Supabase Realtime (optional) |
+| Custom Auth | Supabase Auth (Apple Sign-In) |
 
 ## Features
 
 ### Core
-- Workout Session Tracking mit RPE
-- Progressive Overload Anzeige
-- Exercise Library
-- Training Plans
+- [ ] Workout Session Tracking mit RPE
+- [ ] Progressive Overload Anzeige (via Supabase Function)
+- [ ] Exercise Library (aus Supabase)
+- [ ] Training Plans
+
+### Auth
+- [ ] Sign in with Apple (via Supabase)
+- [ ] Session Persistence
+- [ ] Secure Token Storage (Keychain)
 
 ### HealthKit
-- Schritte importieren
-- Herzfrequenz importieren
-- Schlaf importieren
-- Gewicht sync (bidirektional)
+- [ ] Schritte importieren → daily_logs
+- [ ] Herzfrequenz importieren
+- [ ] Schlaf importieren
+- [ ] Gewicht sync (bidirektional)
 
 ### Agent Integration
-- Chat mit Fitness Coach
-- Plan-Erstellung via Agent
-- Analyse-Reports abrufen
+- [ ] Chat mit Fitness Coach (API Call zu Agent SDK)
+- [ ] Plan-Erstellung via Agent
+- [ ] Analyse-Reports abrufen
 
 ### UI/UX
-- Dark Mode
-- Haptic Feedback
-- Widget für Home Screen
-- Apple Watch Complication (später)
+- [ ] Dark Mode
+- [ ] Haptic Feedback
+- [ ] Widget für Home Screen
+
+## Supabase Integration
+```swift
+import Supabase
+
+let supabase = SupabaseClient(
+  supabaseURL: URL(string: "https://xxx.supabase.co")!,
+  supabaseKey: "your-anon-key"
+)
+
+// Auth
+let session = try await supabase.auth.signInWithApple(
+  idToken: appleIdToken,
+  nonce: nonce
+)
+
+// Query mit RLS (automatisch user-gefiltert)
+let sessions: [WorkoutSession] = try await supabase
+  .from("workout_sessions")
+  .select()
+  .order("date", ascending: false)
+  .execute()
+  .value
+```
 
 ## Akzeptanzkriterien
+- [ ] App startet und zeigt Login
+- [ ] Sign in with Apple funktioniert
 - [ ] Workout kann komplett getrackt werden
+- [ ] Daten werden in Supabase gespeichert
 - [ ] HealthKit Daten werden importiert
-- [ ] Agent-Chat funktioniert
-- [ ] iCloud Sync funktioniert
+- [ ] Progress Charts zeigen echte Daten
 - [ ] App läuft flüssig (60fps)
+
+## Nach Abschluss
+- [ ] `/code-review:code-review` ausführen

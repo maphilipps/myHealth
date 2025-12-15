@@ -28,3 +28,4 @@ Login über Social Provider für einfacheren Zugang.
 - [ ] Apple Sign In funktioniert
 - [ ] Google OAuth funktioniert
 - [ ] Account Linking möglich
+- [ ] `/code-review:code-review` ausführen

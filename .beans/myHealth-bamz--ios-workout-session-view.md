@@ -74,3 +74,4 @@ links:
 - [ ] Previous Session wird angezeigt
 - [ ] Progression-Empfehlung sichtbar
 - [ ] Smooth 60fps Animations
+- [ ] `/code-review:code-review` ausführen

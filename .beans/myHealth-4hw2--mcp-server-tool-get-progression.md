@@ -81,3 +81,4 @@ links:
 - [ ] Alle Edge Cases behandelt (keine Historie, nur 1 Session, etc.)
 - [ ] Unit Tests für Progression-Logik
 - [ ] Reasoning ist hilfreich und verständlich
+- [ ] `/code-review:code-review` ausführen

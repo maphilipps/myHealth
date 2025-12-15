@@ -1,6 +1,6 @@
 ---
 title: 'iOS: Xcode Projekt Setup'
-status: todo
+status: done
 type: task
 priority: high
 tags:
@@ -63,3 +63,4 @@ myHealth/
 - [ ] Basic Navigation funktioniert
 - [ ] HealthKit Capability aktiviert
 - [ ] Repo auf GitHub
+- [ ] `/code-review:code-review` ausführen

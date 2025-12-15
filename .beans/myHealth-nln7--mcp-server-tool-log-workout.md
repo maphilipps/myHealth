@@ -62,3 +62,4 @@ exercises:
 - [ ] YAML-Datei wird korrekt erstellt/erweitert
 - [ ] Validation für Input
 - [ ] Error Handling
+- [ ] `/code-review:code-review` ausführen

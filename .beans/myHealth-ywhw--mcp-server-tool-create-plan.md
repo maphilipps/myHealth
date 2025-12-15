@@ -88,3 +88,4 @@ weekly_structure:
 - [ ] Hybrid-Logik korrekt
 - [ ] YAML-Output validiert
 - [ ] Plan wird in data/plans/ gespeichert
+- [ ] `/code-review:code-review` ausführen

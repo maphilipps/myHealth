@@ -69,3 +69,4 @@ server.registerResource(
 - [ ] Parameter-Parsing funktioniert (z.B. /workouts/2024-12-15)
 - [ ] Error Handling für nicht gefundene Resources
 - [ ] JSON Output ist korrekt formatiert
+- [ ] `/code-review:code-review` ausführen

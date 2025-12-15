@@ -51,3 +51,4 @@ Always be data-driven, encouraging, and concise.
 - [ ] `npm start` startet Agent
 - [ ] MCP Server angebunden
 - [ ] Repo auf GitHub
+- [ ] `/code-review:code-review` ausführen

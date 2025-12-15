@@ -51,3 +51,4 @@ let iCloudURL = FileManager.default.url(
 - [ ] Mac kann Daten lesen
 - [ ] Offline-Modus funktioniert
 - [ ] Sync-Status wird angezeigt
+- [ ] `/code-review:code-review` ausführen

@@ -65,3 +65,4 @@ Agent:
 - [ ] Hybrid-Pläne funktionieren
 - [ ] Periodisierung wird berücksichtigt
 - [ ] Plan-Export als YAML
+- [ ] `/code-review:code-review` ausführen

@@ -37,3 +37,4 @@ POST /auth/reset-password
 - [ ] Email Verification implementiert
 - [ ] Password Reset funktioniert
 - [ ] Tests vorhanden
+- [ ] `/code-review:code-review` ausführen

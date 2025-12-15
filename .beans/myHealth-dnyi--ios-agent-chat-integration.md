@@ -50,3 +50,6 @@ class AgentAPIService {
 - [ ] Chat History
 - [ ] Agent Response Streaming
 - [ ] Error Handling
+
+## Nach Abschluss
+- [ ] `/code-review:code-review` ausführen

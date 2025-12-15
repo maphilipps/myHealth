@@ -1,43 +1,29 @@
 ---
 title: Auth & Multi-User Backend
-status: todo
+status: superseded
 type: epic
-priority: high
+priority: low
 tags:
     - auth
     - backend
+    - archived
 created_at: 2025-12-15T20:50:56Z
-updated_at: 2025-12-15T20:50:56Z
+updated_at: 2025-12-15T22:00:00Z
+superseded_by: myHealth-sb01
 links:
     - parent: myHealth-a122
 ---
 
 # Auth & Multi-User Backend
 
-## Beschreibung
-Komplettes Authentication-System für Multi-User Support. Ermöglicht Skalierung von Single-User zu SaaS-Modell.
+> **⚠️ SUPERSEDED**: Dieses Epic wurde durch [Supabase Setup](myHealth-sb01--supabase-setup-schema.md) ersetzt.
+> Supabase bringt Auth, RLS und Multi-Tenancy out-of-the-box.
 
-## Komponenten
+## Ursprüngliche Beschreibung
+Komplettes Authentication-System für Multi-User Support mit Passport.js, JWT, Prisma.
 
-### Backend (Node.js/TypeScript)
-- User Registration & Login
-- OAuth (Apple, Google)
-- JWT Session Management
-- RBAC (Role-Based Access Control)
-
-### Datenbank
-- PostgreSQL mit Row-Level Security
-- User-Daten-Isolation
-- Migration von YAML zu DB
-
-### iOS Integration
-- Native Auth Screens
-- Sign in with Apple
-- Biometric Login
-- Secure Token Storage
-
-## Technologie-Stack
-- **Auth**: Passport.js oder Auth.js
-- **JWT**: jose Library
-- **DB**: PostgreSQL + Prisma
-- **Password**: Argon2
+## Grund für Ablösung
+- Supabase Auth ist fertig (Email, Apple, Google, Magic Links)
+- Row-Level Security ersetzt manuelle Data Isolation
+- Kein eigenes Session Management nötig
+- Supabase Swift SDK für iOS Auth

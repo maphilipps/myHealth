@@ -42,3 +42,4 @@ POST   /users/me/avatar
 - [ ] Profil CRUD funktioniert
 - [ ] Avatar Upload
 - [ ] Account Deletion mit Daten-Export
+- [ ] `/code-review:code-review` ausführen

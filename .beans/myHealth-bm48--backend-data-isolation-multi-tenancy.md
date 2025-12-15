@@ -37,3 +37,4 @@ CREATE POLICY user_isolation ON workouts
 - [ ] RLS für alle Tabellen
 - [ ] Daten-Migration Script
 - [ ] Security Audit bestanden
+- [ ] `/code-review:code-review` ausführen

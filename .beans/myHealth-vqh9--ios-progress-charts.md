@@ -61,3 +61,4 @@ struct WeightChart: View {
 - [ ] Übungs-Progression Chart
 - [ ] Interaktive Tooltips
 - [ ] Smooth Animations
+- [ ] `/code-review:code-review` ausführen

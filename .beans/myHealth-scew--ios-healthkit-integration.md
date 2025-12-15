@@ -76,3 +76,4 @@ class HealthKitService {
 - [ ] Permission Request funktioniert
 - [ ] Background Sync eingerichtet
 - [ ] Daten werden in SwiftData gespeichert
+- [ ] `/code-review:code-review` ausführen
