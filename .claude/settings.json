@@ -1,0 +1,21 @@
+{
+  "mcpServers": {
+    "myhealth-agent": {
+      "command": "node",
+      "args": [
+        "--loader",
+        "ts-node/esm",
+        "/Users/marc.philipps/Documents/myhealth-agent/src/index.ts"
+      ],
+      "env": {
+        "NODE_NO_WARNINGS": "1"
+      }
+    }
+  },
+  "permissions": {
+    "allow": [
+      "mcp__fitness-tools__*",
+      "mcp__plan-tools__*"
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "hooks": [
+    {
+      "matcher": "*",
+      "hooks": [
+        {
+          "type": "prompt",
+          "event": "SessionStart",
+          "prompt": "myHealth fitness tracking is available. You can use these capabilities:\n\n**Workout Tracking:**\n- Log sets with weight, reps, and RPE\n- Get progressive overload weight recommendations\n- Track exercise history and PRs\n\n**Training Plans:**\n- Generate personalized training plans\n- Calculate periodization phases\n- Optimize hybrid strength/cardio schedules\n\nUse the myhealth-workout and myhealth-plans skills when the user asks about fitness tracking or training plans."
+        }
+      ]
+    }
+  ]
+}
