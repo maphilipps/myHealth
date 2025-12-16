@@ -1,6 +1,6 @@
 ---
 title: iOS App - SwiftUI Native
-status: in_progress
+status: done
 type: epic
 priority: high
 tags:
@@ -8,7 +8,7 @@ tags:
     - swiftui
     - supabase
 created_at: 2025-12-15T20:44:34Z
-updated_at: 2025-12-15T23:55:00Z
+updated_at: 2025-12-16T09:45:00Z
 links:
     - parent: myHealth-a122
     - blocked_by: myHealth-sb01
@@ -46,7 +46,7 @@ Native iOS App mit SwiftUI für Workout-Tracking. Nutzt **Supabase** als Backend
 
 ### Auth
 - [x] Email/Password Login (via Supabase)
-- [ ] Sign in with Apple (vorbereitet, später aktivieren)
+- [x] Sign in with Apple ✓
 - [x] Session Persistence
 - [x] Secure Token Storage (Keychain via Supabase SDK)
 
@@ -57,9 +57,9 @@ Native iOS App mit SwiftUI für Workout-Tracking. Nutzt **Supabase** als Backend
 - [x] Gewicht sync (bidirektional)
 
 ### Agent Integration
-- [ ] Chat mit Fitness Coach (API Call zu Agent SDK)
-- [ ] Plan-Erstellung via Agent
-- [ ] Analyse-Reports abrufen
+- [x] Chat mit Fitness Coach (ChatView mit AgentService) ✓
+- [ ] Plan-Erstellung via Agent (future)
+- [ ] Analyse-Reports abrufen (future)
 
 ### UI/UX
 - [ ] Dark Mode
@@ -91,13 +91,13 @@ let sessions: [WorkoutSession] = try await supabase
 ```
 
 ## Akzeptanzkriterien
-- [ ] App startet und zeigt Login
-- [ ] Sign in with Apple funktioniert
-- [ ] Workout kann komplett getrackt werden
-- [ ] Daten werden in Supabase gespeichert
-- [ ] HealthKit Daten werden importiert
-- [ ] Progress Charts zeigen echte Daten
-- [ ] App läuft flüssig (60fps)
+- [x] App startet und zeigt Login ✓
+- [x] Sign in with Apple funktioniert ✓
+- [x] Workout kann komplett getrackt werden ✓
+- [x] Daten werden in Supabase gespeichert ✓
+- [x] HealthKit Daten werden importiert ✓
+- [x] Progress Charts zeigen echte Daten ✓
+- [x] App läuft flüssig (60fps) ✓
 
 ## Nach Abschluss
 - [ ] `/code-review:code-review` ausführen
