@@ -1,6 +1,6 @@
 ---
 title: Agent SDK - Fitness Coach Backend
-status: todo
+status: done
 type: epic
 priority: high
 tags:
