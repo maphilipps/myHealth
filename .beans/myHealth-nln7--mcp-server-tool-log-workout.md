@@ -1,6 +1,6 @@
 ---
 title: 'MCP Server: Tool - log_workout'
-status: todo
+status: superseded
 type: feature
 priority: high
 tags:

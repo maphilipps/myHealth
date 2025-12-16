@@ -1,6 +1,6 @@
 ---
 title: 'Backend: API Authentication Middleware'
-status: todo
+status: superseded
 type: task
 priority: critical
 tags:

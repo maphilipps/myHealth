@@ -1,6 +1,6 @@
 ---
 title: 'Backend: Data Isolation & Multi-Tenancy'
-status: todo
+status: superseded
 type: task
 priority: high
 tags:

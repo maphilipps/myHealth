@@ -1,6 +1,6 @@
 ---
 title: 'MCP Server: npm Package vorbereiten'
-status: todo
+status: superseded
 type: task
 priority: normal
 tags:

@@ -1,6 +1,6 @@
 ---
 title: 'MCP Server: Tool - get_progression'
-status: todo
+status: superseded
 type: feature
 priority: critical
 tags:

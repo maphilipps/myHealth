@@ -1,6 +1,6 @@
 ---
 title: 'Backend: User Profile & Settings'
-status: todo
+status: superseded
 type: feature
 priority: normal
 tags:

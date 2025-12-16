@@ -1,6 +1,6 @@
 ---
 title: 'Backend: Session & Token Management'
-status: todo
+status: superseded
 type: feature
 priority: high
 tags:

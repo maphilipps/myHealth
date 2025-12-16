@@ -1,6 +1,6 @@
 ---
 title: 'MCP Server: Projekt Setup'
-status: todo
+status: superseded
 type: task
 priority: high
 tags:

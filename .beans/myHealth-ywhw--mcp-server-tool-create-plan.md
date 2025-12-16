@@ -1,6 +1,6 @@
 ---
 title: 'MCP Server: Tool - create_plan'
-status: todo
+status: superseded
 type: feature
 priority: high
 tags:

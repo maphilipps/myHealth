@@ -1,6 +1,6 @@
 ---
 title: 'Backend: OAuth & Social Login'
-status: todo
+status: superseded
 type: feature
 priority: normal
 tags:

@@ -1,6 +1,6 @@
 ---
 title: 'MCP Server: Resources implementieren'
-status: todo
+status: superseded
 type: task
 priority: high
 tags:

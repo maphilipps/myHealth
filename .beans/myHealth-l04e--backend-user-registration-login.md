@@ -1,6 +1,6 @@
 ---
 title: 'Backend: User Registration & Login'
-status: todo
+status: superseded
 type: feature
 priority: high
 tags:
