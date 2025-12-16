@@ -1,21 +1,25 @@
 ---
 title: 'iOS: iCloud Sync'
-status: todo
+status: superseded
 type: feature
-priority: high
+priority: low
 tags:
     - ios
     - sync
 created_at: 2025-12-15T20:45:36Z
-updated_at: 2025-12-15T20:45:36Z
+updated_at: 2025-12-16T09:30:00Z
 links:
     - parent: myHealth-mudp
 ---
 
 # iOS: iCloud Sync
 
+> ⚠️ **SUPERSEDED** by Supabase - Multi-device sync und Backup werden automatisch durch Supabase PostgreSQL gehandhabt. iCloud Sync würde zu Datenkonflikten führen.
+
 ## Beschreibung
-Synchronisation der Workout-Daten über iCloud für Multi-Device Support und Backup.
+~~Synchronisation der Workout-Daten über iCloud für Multi-Device Support und Backup.~~
+
+**Warum superseded:** Die ursprüngliche YAML-basierte Architektur benötigte iCloud für Multi-Device-Support. Mit der Supabase-Migration werden alle Daten zentral in PostgreSQL gespeichert und sind automatisch auf allen Geräten verfügbar.
 
 ## Optionen
 

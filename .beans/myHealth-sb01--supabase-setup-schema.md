@@ -1,6 +1,6 @@
 ---
 title: Supabase Setup & Schema
-status: in_progress
+status: done
 type: epic
 priority: critical
 tags:
@@ -54,7 +54,7 @@ Offizieller Supabase MCP Server in Claude Code einrichten.
 - [x] Supabase Projekt erstellt (rpixspaeamfzssinewuo)
 - [x] Schema migriert (16 Tabellen, 4 Functions)
 - [x] RLS Policies aktiv
-- [ ] Auth Provider konfigurieren (sb05)
+- [x] Auth Provider konfigurieren (sb05)
 - [x] Supabase MCP in Claude Code konfiguriert
 - [ ] YAML-Daten migrieren (sb07) - optional, kann leer starten
 - [x] Exercise Library befüllt (38 Übungen)
