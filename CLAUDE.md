@@ -3,94 +3,101 @@
 ## Projektübersicht
 
 **myHealth** ist ein persönliches Gesundheits-Tracking-System mit:
-- YAML-basierter Datenspeicherung (Git-versioniert)
-- Claude Code Plugin für intelligente Analyse
-- React Web-UI für mobilen Zugriff
+- **Supabase Backend** (PostgreSQL + Auth + RLS)
+- **iOS App** (SwiftUI + Supabase Swift SDK)
+- **Agent SDK** (FitnessCoach, PlanCreator Agents)
 - Progressive Overload Training-Algorithmen
 
-## Datenstruktur
+## Architektur
 
 ```
-data/
-├── daily/          # Tägliche Logs (Gewicht, Schlaf, Schritte, Stimmung)
-├── workouts/       # Training-Sessions mit Sätzen und RPE
-├── nutrition/      # Mahlzeiten und Makros
-├── vitals/         # Herzfrequenz, Blutdruck, HRV
-├── plans/          # Trainingspläne (YAML-Definitionen)
-└── exercises/      # Übungs-Bibliothek mit Form-Cues
+┌─────────────────────────────────────────────────────────────┐
+│                        Supabase                              │
+├──────────────┬──────────────┬─────────────┬─────────────────┤
+│  PostgreSQL  │    Auth      │   Storage   │  Edge Functions │
+│  (RLS)       │  (Apple,     │  (optional) │  (Webhooks)     │
+│              │   Email)     │             │                 │
+└──────┬───────┴──────┬───────┴─────────────┴─────────────────┘
+       │              │
+       ▼              ▼
+┌──────────────┐ ┌──────────────┐
+│ Supabase MCP │ │ iOS App      │
+│ (Claude Code)│ │ (Swift SDK)  │
+└──────────────┘ └──────────────┘
+       │              │
+       └──────┬───────┘
+              ▼
+┌─────────────────────────────────────────────────────────────┐
+│              Agent SDK Backend                               │
+│         FitnessCoachAgent, PlanCreatorAgent                  │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-## Verfügbare Commands
+## Datenbank-Schema
 
-- `/myhealth:log` - Schnelles Eintragen von Daten
-- `/myhealth:analyze` - Daten analysieren
-- `/myhealth:report` - Reports generieren
-- `/myhealth:plan` - Trainingsplan erstellen/anpassen
-- `/myhealth:import` - Daten aus Apple Health/Yazio importieren
+Alle Daten werden in Supabase PostgreSQL gespeichert:
+- `exercises` - Übungs-Bibliothek (global + custom)
+- `workout_sessions` - Training-Sessions
+- `workout_sets` - Einzelne Sätze mit Gewicht/Reps/RPE
+- `vitals` - Tägliche Vitaldaten (Gewicht, Schlaf, Schritte)
+- `training_plans` - Trainingspläne
+- `nutrition_logs` - Ernährungsdaten
 
 ## Verfügbare Agents
 
-- **training-coach** - Workout-Empfehlungen und Progressive Overload
-- **nutrition-analyst** - Ernährungsanalyse und Makro-Empfehlungen
-- **health-reporter** - Trend-Analyse und Health-Reports
+- **FitnessCoachAgent** - Workout-Empfehlungen und Progressive Overload
+- **PlanCreatorAgent** - Trainingsplan-Erstellung und Anpassung
+- **HealthReporterAgent** - Trend-Analyse und Reports
 
-## Wichtige Konventionen
+## Supabase MCP
 
-### Dateinamen
-- Daily: `YYYY-MM-DD.yaml`
-- Workouts: `YYYY-MM-DD-[type].yaml` (z.B. `2024-12-15-torso.yaml`)
-- Nutrition: `YYYY-MM-DD.yaml`
+Claude Code hat direkten Zugriff auf die Supabase-Datenbank via MCP:
 
-### YAML-Struktur
-Alle Dateien müssen dem Schema in `skills/health-schema/SKILL.md` entsprechen.
-
-### Progressive Overload Regeln
-1. Bei RPE < 8: Gewicht erhöhen (2.5kg bei Compound, 1.25kg bei Isolation)
-2. Bei RPE 8-9: Wiederholungen erhöhen bis oberes Rep-Range
-3. Bei RPE > 9 für 2+ Wochen: Deload einplanen
-
-## Web-UI
-
-```bash
-cd web && npm run dev
+```typescript
+// Beispiel: Letzte Workouts abfragen
+const { data } = await supabase
+  .from('workout_sessions')
+  .select('*, workout_sets(*)')
+  .order('date', { ascending: false })
+  .limit(5);
 ```
+
+## Progressive Overload (via get_next_weight Function)
+
+Die Datenbank enthält eine `get_next_weight(exercise_id, target_reps)` Function:
+- Analysiert die letzten 3 Sessions
+- Berechnet Gewichtsempfehlung basierend auf RPE
+- Gibt Trend und Reasoning zurück
+
+```sql
+SELECT * FROM get_next_weight('exercise-uuid', 8);
+-- Returns: recommended_weight, last_weight, last_reps, last_rpe, trend, reasoning
+```
+
+## iOS App
+
+Repository: `myhealth-ios` (https://github.com/maphilipps/myhealth-ios)
 
 Features:
-- Dashboard mit Tages-Übersicht
-- Workout Chat mit Claude API
-- Quick Log für schnelle Einträge
-- Nutrition Tracking
-- Settings für API Key und Profil
+- Sign in with Apple + Email/Password
+- Workout Session Tracking
+- HealthKit Integration
+- Agent Chat (Coach Tab)
+- Progress Charts
 
-## Sync-Scripts
+## Migration von YAML
+
+Historische YAML-Daten befinden sich in `data-archive/`.
+Migration-Script: `scripts/migrate-yaml-to-supabase.ts`
 
 ```bash
-# Apple Health importieren
-./scripts/sync/apple-health-sync.sh
-
-# Yazio importieren
-./scripts/sync/yazio-import.sh <export.csv>
+# Migration ausführen (benötigt SUPABASE_URL, SUPABASE_SERVICE_KEY, USER_ID)
+npx ts-node scripts/migrate-yaml-to-supabase.ts
 ```
 
-## Git Workflow
+## Beispiel-Abfragen (via Supabase MCP)
 
-Nach Datenänderungen immer committen:
-```bash
-git add data/
-git commit -m "data: [Beschreibung]"
-```
-
-## Spezifische Hinweise
-
-1. **Gewichts-Empfehlungen**: Immer auf Basis der letzten 2-3 Workouts berechnen
-2. **RPE-Tracking**: Bei allen Sätzen erfassen für bessere Progression
-3. **Ernährung**: Protein-Ziel ist 2g/kg Körpergewicht
-4. **Schlaf**: Mindestens 7h für optimale Regeneration
-
-## Beispiel-Abfragen
-
-- "Wie war mein Training diese Woche?"
-- "Was soll ich heute bei Bankdrücken machen?"
-- "Zeig mir meinen Gewichtsverlauf"
-- "Analyse meine Ernährung der letzten 7 Tage"
-- "Erstelle einen Weekly Report"
+- "Wie war mein Training diese Woche?" → Query workout_sessions + workout_sets
+- "Was soll ich heute bei Bankdrücken machen?" → Call get_next_weight()
+- "Zeig mir meinen Gewichtsverlauf" → Query vitals.weight_kg
+- "Erstelle einen Weekly Report" → Aggregate workout_sessions, vitals

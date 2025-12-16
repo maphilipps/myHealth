@@ -1,6 +1,6 @@
 ---
 title: YAML-Daten nach Supabase migrieren
-status: todo
+status: done
 type: task
 priority: medium
 tags:
