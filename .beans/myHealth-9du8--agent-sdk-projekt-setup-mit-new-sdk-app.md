@@ -1,6 +1,6 @@
 ---
 title: 'Agent SDK: Projekt Setup mit /new-sdk-app'
-status: todo
+status: done
 type: task
 priority: high
 tags:

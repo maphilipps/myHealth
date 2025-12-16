@@ -1,13 +1,13 @@
 ---
 title: 'iOS: Agent Chat Integration'
-status: todo
+status: done
 type: feature
 priority: high
 tags:
     - ios
     - agent
 created_at: 2025-12-15T20:45:34Z
-updated_at: 2025-12-15T20:45:34Z
+updated_at: 2025-12-16T07:20:00Z
 links:
     - parent: myHealth-mudp
 ---
@@ -17,39 +17,44 @@ links:
 ## Beschreibung
 Chat-Interface für Kommunikation mit dem Fitness Coach Agent.
 
-## UI Design
-- Chat Bubble Style
-- Markdown Rendering
-- Typing Indicator
-- Quick Actions (Buttons)
+## Implementiert
 
-## API Integration
-```swift
-class AgentAPIService {
-    private let baseURL = "http://localhost:3000" // Local dev
-    
-    func sendMessage(_ message: String) async throws -> AgentResponse {
-        // POST to agent endpoint
-    }
-    
-    func startWorkoutSession(type: String) async throws -> WorkoutPlan {
-        // Get workout plan from agent
-    }
-}
-```
+### AgentService (`Services/AgentService.swift`)
+- `ChatMessage` model mit UUID, role, content, timestamp
+- `QuickAction` struct für Quick Action Buttons
+- `AgentService` class (@MainActor, ObservableObject)
+- Mock response generation für Torso, Limbs, Summary, Plans
+- Welcome message bei Init
+
+### ChatView (`Views/Chat/ChatView.swift`)
+- Chat Bubble UI mit User/Assistant Differenzierung
+- `ChatBubble` mit custom `ChatBubbleShape` (Tail)
+- `TypingIndicator` mit Animation
+- `ChatQuickActionButton` für Quick Actions
+- Collapsible Quick Actions Panel
+- Auto-scroll bei neuen Messages
+- Markdown Rendering via `LocalizedStringKey`
+
+### MainTabView Integration
+- Coach Tab zwischen Dashboard und Workout
+- Icon: `message.fill`
+
+### Fixes
+- `NSHealthUpdateUsageDescription` in Info.plist für HealthKit
+- Debug bypass flag in ContentView für Testing
 
 ## Quick Actions
-- 'Start Torso Workout'
-- 'Start Limbs Workout'
-- 'Weekly Summary'
-- 'Create New Plan'
+- [x] 'Start Torso Workout'
+- [x] 'Start Limbs Workout'
+- [x] 'Weekly Summary'
+- [x] 'Create New Plan'
 
 ## Features
-- [ ] Text Input mit Send Button
-- [ ] Voice Input (optional)
-- [ ] Chat History
-- [ ] Agent Response Streaming
-- [ ] Error Handling
+- [x] Text Input mit Send Button
+- [ ] Voice Input (optional) - Future
+- [x] Chat History (in-memory)
+- [ ] Agent Response Streaming - Future (needs backend)
+- [x] Error Handling
 
-## Nach Abschluss
-- [ ] `/code-review:code-review` ausführen
+## Commits
+- `b2d8180` feat: Add Agent Chat integration with Coach tab

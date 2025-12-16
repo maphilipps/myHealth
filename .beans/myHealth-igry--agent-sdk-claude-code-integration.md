@@ -1,6 +1,6 @@
 ---
 title: 'Agent SDK: Claude Code Integration'
-status: todo
+status: done
 type: task
 priority: high
 tags:

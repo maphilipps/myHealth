@@ -1,6 +1,6 @@
 ---
 title: 'Agent SDK: FitnessCoachAgent implementieren'
-status: todo
+status: done
 type: feature
 priority: critical
 tags:

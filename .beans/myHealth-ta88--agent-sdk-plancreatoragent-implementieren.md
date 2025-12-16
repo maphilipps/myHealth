@@ -1,6 +1,6 @@
 ---
 title: 'Agent SDK: PlanCreatorAgent implementieren'
-status: todo
+status: done
 type: feature
 priority: high
 tags:
