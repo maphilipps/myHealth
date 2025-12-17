@@ -1,0 +1,41 @@
+{
+  "name": "fitness-agents",
+  "version": "1.0.0",
+  "description": "AI Fitness Coach Agents - Agent-First Architecture",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "dev:server": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "start:server": "node dist/server.js",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
+    "test": "vitest"
+  },
+  "keywords": [
+    "fitness",
+    "ai",
+    "agents",
+    "claude"
+  ],
+  "author": "Marc Philipps",
+  "license": "MIT",
+  "dependencies": {
+    "@anthropic-ai/claude-agent-sdk": "^0.1.71",
+    "@supabase/supabase-js": "^2.88.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "zod": "^4.2.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.0.3",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.16"
+  }
+}

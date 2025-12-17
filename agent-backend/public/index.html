@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>myHealth AI - Fitness Coach Demo</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      min-height: 100vh;
+      color: #fff;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    header {
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+      background: linear-gradient(90deg, #00d9ff, #00ff88);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    header p {
+      color: #888;
+      margin-top: 8px;
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ff4444;
+    }
+
+    .status-dot.connected {
+      background: #00ff88;
+    }
+
+    .quick-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin: 20px 0;
+    }
+
+    .quick-action {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 14px;
+    }
+
+    .quick-action:hover {
+      background: rgba(0,217,255,0.2);
+      border-color: #00d9ff;
+    }
+
+    .chat-container {
+      flex: 1;
+      overflow-y: auto;
+      background: rgba(0,0,0,0.2);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .message {
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .message.user {
+      align-items: flex-end;
+    }
+
+    .message.assistant {
+      align-items: flex-start;
+    }
+
+    .message-content {
+      max-width: 80%;
+      padding: 12px 16px;
+      border-radius: 16px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    .message.user .message-content {
+      background: linear-gradient(135deg, #00d9ff, #0099ff);
+      border-bottom-right-radius: 4px;
+    }
+
+    .message.assistant .message-content {
+      background: rgba(255,255,255,0.1);
+      border-bottom-left-radius: 4px;
+    }
+
+    .message-time {
+      font-size: 11px;
+      color: #666;
+      margin-top: 4px;
+    }
+
+    .typing-indicator {
+      display: none;
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 16px;
+      width: fit-content;
+    }
+
+    .typing-indicator.active {
+      display: flex;
+      gap: 4px;
+    }
+
+    .typing-indicator span {
+      width: 8px;
+      height: 8px;
+      background: #00d9ff;
+      border-radius: 50%;
+      animation: typing 1.4s infinite;
+    }
+
+    .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes typing {
+      0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+      30% { transform: translateY(-4px); opacity: 1; }
+    }
+
+    .input-container {
+      display: flex;
+      gap: 10px;
+    }
+
+    .input-container input {
+      flex: 1;
+      padding: 16px 20px;
+      border: none;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      font-size: 16px;
+      outline: none;
+    }
+
+    .input-container input::placeholder {
+      color: #666;
+    }
+
+    .input-container input:focus {
+      background: rgba(255,255,255,0.15);
+    }
+
+    .input-container button {
+      padding: 16px 24px;
+      border: none;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #00d9ff, #00ff88);
+      color: #1a1a2e;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .input-container button:hover {
+      transform: scale(1.05);
+    }
+
+    .input-container button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .agents-info {
+      text-align: center;
+      padding: 10px;
+      color: #666;
+      font-size: 12px;
+    }
+
+    .agent-badge {
+      display: inline-block;
+      padding: 4px 8px;
+      background: rgba(139, 92, 246, 0.2);
+      color: #a78bfa;
+      border-radius: 8px;
+      margin: 2px;
+      font-size: 11px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🏋️ myHealth AI</h1>
+      <p>Dein persönlicher Fitness Coach</p>
+      <div class="status">
+        <span class="status-dot" id="statusDot"></span>
+        <span id="statusText">Verbinde...</span>
+      </div>
+    </header>
+
+    <div class="quick-actions" id="quickActions">
+      <button class="quick-action" onclick="sendQuickAction('Ich will trainieren')">🏋️ Training starten</button>
+      <button class="quick-action" onclick="sendQuickAction('Wie war meine Woche?')">📊 Wochen-Summary</button>
+      <button class="quick-action" onclick="sendQuickAction('Erstelle mir einen Plan')">📋 Plan erstellen</button>
+      <button class="quick-action" onclick="sendQuickAction('Analysiere meinen Fortschritt')">📈 Fortschritt</button>
+    </div>
+
+    <div class="chat-container" id="chatContainer">
+      <div class="message assistant">
+        <div class="message-content">
+          Willkommen bei myHealth AI! 👋
+
+Ich bin dein persönlicher Fitness Coach mit 4 spezialisierten Agents:
+
+• 🧠 PlannerAgent - Trainingspläne & Periodisierung
+• 🏋️ CoachAgent - Live-Coaching & Empfehlungen
+• 📊 AnalystAgent - Muster & Insights
+• 📝 ReporterAgent - Summaries & Reports
+
+Wie kann ich dir heute helfen?
+        </div>
+        <span class="message-time">Jetzt</span>
+      </div>
+      <div class="typing-indicator" id="typingIndicator">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+
+    <div class="input-container">
+      <input
+        type="text"
+        id="messageInput"
+        placeholder="Schreib eine Nachricht..."
+        onkeypress="handleKeyPress(event)"
+      >
+      <button id="sendButton" onclick="sendMessage()">Senden</button>
+    </div>
+
+    <div class="agents-info">
+      <span class="agent-badge">PlannerAgent</span>
+      <span class="agent-badge">CoachAgent</span>
+      <span class="agent-badge">AnalystAgent</span>
+      <span class="agent-badge">ReporterAgent</span>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = 'http://localhost:3001';
+    let isConnected = false;
+
+    // Check API health on load
+    async function checkHealth() {
+      try {
+        const response = await fetch(`${API_URL}/api/health`);
+        const data = await response.json();
+        if (data.status === 'ok') {
+          document.getElementById('statusDot').classList.add('connected');
+          document.getElementById('statusText').textContent = 'Verbunden';
+          isConnected = true;
+        }
+      } catch (error) {
+        document.getElementById('statusText').textContent = 'Nicht verbunden';
+        isConnected = false;
+      }
+    }
+
+    function addMessage(content, role) {
+      const container = document.getElementById('chatContainer');
+      const typingIndicator = document.getElementById('typingIndicator');
+
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${role}`;
+
+      const contentDiv = document.createElement('div');
+      contentDiv.className = 'message-content';
+      contentDiv.textContent = content;
+
+      const timeSpan = document.createElement('span');
+      timeSpan.className = 'message-time';
+      timeSpan.textContent = new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+
+      messageDiv.appendChild(contentDiv);
+      messageDiv.appendChild(timeSpan);
+
+      // Insert before typing indicator
+      container.insertBefore(messageDiv, typingIndicator);
+
+      // Scroll to bottom
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function showTyping(show) {
+      const indicator = document.getElementById('typingIndicator');
+      indicator.classList.toggle('active', show);
+      if (show) {
+        document.getElementById('chatContainer').scrollTop = document.getElementById('chatContainer').scrollHeight;
+      }
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById('messageInput');
+      const button = document.getElementById('sendButton');
+      const message = input.value.trim();
+
+      if (!message) return;
+
+      // Add user message
+      addMessage(message, 'user');
+      input.value = '';
+
+      // Disable input while processing
+      button.disabled = true;
+      input.disabled = true;
+      showTyping(true);
+
+      try {
+        const response = await fetch(`${API_URL}/api/chat`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ message })
+        });
+
+        const data = await response.json();
+
+        showTyping(false);
+
+        if (data.success) {
+          addMessage(data.response, 'assistant');
+        } else {
+          addMessage('Entschuldigung, es gab einen Fehler. Bitte versuche es erneut.', 'assistant');
+        }
+      } catch (error) {
+        showTyping(false);
+        addMessage('Verbindungsfehler. Stelle sicher, dass der Server läuft (npm run dev:server).', 'assistant');
+      }
+
+      // Re-enable input
+      button.disabled = false;
+      input.disabled = false;
+      input.focus();
+    }
+
+    function sendQuickAction(message) {
+      document.getElementById('messageInput').value = message;
+      sendMessage();
+    }
+
+    function handleKeyPress(event) {
+      if (event.key === 'Enter') {
+        sendMessage();
+      }
+    }
+
+    // Initialize
+    checkHealth();
+    setInterval(checkHealth, 10000); // Check every 10 seconds
+  </script>
+</body>
+</html>
