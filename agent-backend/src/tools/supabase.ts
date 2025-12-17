@@ -957,6 +957,146 @@ export const supabaseToolsServer = createSdkMcpServer({
       }
     ),
 
+    // ==================== WORKOUT CREATION TOOLS ====================
+
+    tool(
+      "set_workout_exercises",
+      "Set planned exercises for a workout session. The agent uses this after analyzing the user's request and exercise history to create a personalized workout plan.",
+      {
+        session_id: z.string().describe("Workout session UUID"),
+        exercises: z.array(z.object({
+          exercise_id: z.string().describe("Exercise UUID from library"),
+          exercise_name: z.string().describe("Exercise name for display"),
+          target_sets: z.number().min(1).max(10).describe("Number of sets planned"),
+          target_reps_min: z.number().min(1).describe("Minimum reps per set"),
+          target_reps_max: z.number().min(1).describe("Maximum reps per set"),
+          recommended_weight_kg: z.number().min(0).describe("Recommended weight based on history"),
+          notes: z.string().optional().describe("Form cues or special instructions")
+        })).describe("List of planned exercises with recommendations")
+      },
+      async (args) => {
+        // Store planned exercises in session metadata
+        const { data, error } = await supabase
+          .from('workout_sessions')
+          .update({
+            metadata: {
+              planned_exercises: args.exercises,
+              plan_created_at: new Date().toISOString()
+            }
+          })
+          .eq('id', args.session_id)
+          .select()
+          .single();
+
+        if (error) {
+          return { content: [{ type: "text", text: `Error setting workout plan: ${error.message}` }], isError: true };
+        }
+
+        // Format a nice preview
+        const preview = args.exercises.map((ex, i) =>
+          `${i + 1}. **${ex.exercise_name}**\n   ${ex.target_sets} sets × ${ex.target_reps_min}-${ex.target_reps_max} reps @ ${ex.recommended_weight_kg}kg${ex.notes ? `\n   💡 ${ex.notes}` : ''}`
+        ).join('\n\n');
+
+        return {
+          content: [{
+            type: "text",
+            text: `Workout plan set!\n\n${preview}\n\nSession ID: ${args.session_id}`
+          }]
+        };
+      }
+    ),
+
+    tool(
+      "get_recommended_weight",
+      "Calculate recommended weight for an exercise based on recent history. The agent calls this for each exercise when creating a workout.",
+      {
+        exercise_id: z.string().describe("Exercise UUID"),
+        target_reps: z.number().describe("Target reps for today"),
+        user_id: z.string().optional()
+      },
+      async (args) => {
+        const userId = args.user_id || getDefaultUserId();
+
+        // Get last 3 sessions for this exercise
+        const { data: history, error } = await supabase
+          .from('workout_sets')
+          .select(`
+            weight_kg, reps, rpe,
+            workout_sessions!inner (date, user_id)
+          `)
+          .eq('exercise_id', args.exercise_id)
+          .eq('workout_sessions.user_id', userId)
+          .order('workout_sessions(date)', { ascending: false })
+          .limit(15);
+
+        if (error || !history?.length) {
+          return {
+            content: [{
+              type: "text",
+              text: JSON.stringify({
+                recommended_weight: null,
+                reason: "No history found - start light and build up",
+                last_weight: null,
+                trend: "new"
+              }, null, 2)
+            }]
+          };
+        }
+
+        // Group by session and get best set per session
+        // Note: Supabase inner join returns workout_sessions as object, not array
+        const sessions = new Map<string, { weight: number; reps: number; rpe: number | null }>();
+        for (const set of history) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const sessionData = (set as any).workout_sessions;
+          const date = sessionData?.date as string;
+          if (date && (!sessions.has(date) || set.weight_kg > (sessions.get(date)?.weight || 0))) {
+            sessions.set(date, { weight: set.weight_kg, reps: set.reps, rpe: set.rpe });
+          }
+        }
+
+        const recentSessions = Array.from(sessions.values()).slice(0, 3);
+        const lastSession = recentSessions[0];
+
+        // Calculate recommendation (agent can override this logic)
+        let recommendedWeight = lastSession.weight;
+        let trend = "maintain";
+        let reason = "Maintaining current weight";
+
+        if (lastSession.rpe !== null && lastSession.rpe < 7) {
+          // Easy last time - suggest increase
+          recommendedWeight = Math.ceil((lastSession.weight * 1.025) / 2.5) * 2.5; // Round to 2.5kg
+          trend = "increase";
+          reason = `Last session RPE ${lastSession.rpe} was low - time to progress`;
+        } else if (lastSession.rpe !== null && lastSession.rpe >= 9.5) {
+          // Very hard - suggest decrease or maintain
+          recommendedWeight = lastSession.weight;
+          trend = "careful";
+          reason = `Last session RPE ${lastSession.rpe} was high - prioritize form`;
+        } else if (lastSession.reps >= args.target_reps + 2) {
+          // Hit more reps than target - can increase
+          recommendedWeight = Math.ceil((lastSession.weight * 1.025) / 2.5) * 2.5;
+          trend = "increase";
+          reason = `Last time hit ${lastSession.reps} reps easily - ready for more weight`;
+        }
+
+        return {
+          content: [{
+            type: "text",
+            text: JSON.stringify({
+              recommended_weight: recommendedWeight,
+              last_weight: lastSession.weight,
+              last_reps: lastSession.reps,
+              last_rpe: lastSession.rpe,
+              trend,
+              reason,
+              history_sessions: recentSessions.length
+            }, null, 2)
+          }]
+        };
+      }
+    ),
+
     tool(
       "log_vitals",
       "Log daily vitals (weight, sleep, etc.)",
