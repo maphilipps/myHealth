@@ -1098,6 +1098,124 @@ export const supabaseToolsServer = createSdkMcpServer({
     ),
 
     tool(
+      "modify_workout_exercises",
+      "Modify the planned exercises in an active workout session. Use this for adding, removing, reordering, or swapping exercises mid-workout.",
+      {
+        session_id: z.string().describe("Workout session UUID"),
+        action: z.enum(["add", "remove", "swap", "reorder", "adjust"]).describe("Type of modification"),
+        exercise_index: z.number().optional().describe("Index of exercise to modify (0-based)"),
+        new_exercise: z.object({
+          exercise_id: z.string(),
+          exercise_name: z.string(),
+          target_sets: z.number().min(1).max(10),
+          target_reps_min: z.number().min(1),
+          target_reps_max: z.number().min(1),
+          recommended_weight_kg: z.number().min(0),
+          notes: z.string().optional()
+        }).optional().describe("New exercise data (for add/swap)"),
+        new_order: z.array(z.number()).optional().describe("New order of exercise indices (for reorder)"),
+        adjustments: z.object({
+          target_sets: z.number().optional(),
+          target_reps_min: z.number().optional(),
+          target_reps_max: z.number().optional(),
+          recommended_weight_kg: z.number().optional()
+        }).optional().describe("Adjustments to apply (for adjust action)")
+      },
+      async (args) => {
+        // Get current session with planned exercises
+        const { data: session, error: fetchError } = await supabase
+          .from('workout_sessions')
+          .select('metadata')
+          .eq('id', args.session_id)
+          .single();
+
+        if (fetchError || !session) {
+          return { content: [{ type: "text", text: `Error fetching session: ${fetchError?.message || 'Not found'}` }], isError: true };
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const metadata = session.metadata as any || {};
+        let exercises = metadata.planned_exercises || [];
+        let actionDescription = "";
+
+        switch (args.action) {
+          case "add":
+            if (!args.new_exercise) {
+              return { content: [{ type: "text", text: "new_exercise required for add action" }], isError: true };
+            }
+            exercises.push(args.new_exercise);
+            actionDescription = `Added ${args.new_exercise.exercise_name}`;
+            break;
+
+          case "remove":
+            if (args.exercise_index === undefined || args.exercise_index >= exercises.length) {
+              return { content: [{ type: "text", text: "Valid exercise_index required for remove action" }], isError: true };
+            }
+            const removed = exercises.splice(args.exercise_index, 1)[0];
+            actionDescription = `Removed ${removed.exercise_name}`;
+            break;
+
+          case "swap":
+            if (args.exercise_index === undefined || !args.new_exercise) {
+              return { content: [{ type: "text", text: "exercise_index and new_exercise required for swap action" }], isError: true };
+            }
+            const swapped = exercises[args.exercise_index];
+            exercises[args.exercise_index] = args.new_exercise;
+            actionDescription = `Swapped ${swapped?.exercise_name || 'exercise'} with ${args.new_exercise.exercise_name}`;
+            break;
+
+          case "reorder":
+            if (!args.new_order || args.new_order.length !== exercises.length) {
+              return { content: [{ type: "text", text: "new_order array required with same length as exercises" }], isError: true };
+            }
+            exercises = args.new_order.map(i => exercises[i]);
+            actionDescription = "Reordered exercises";
+            break;
+
+          case "adjust":
+            if (args.exercise_index === undefined || !args.adjustments) {
+              return { content: [{ type: "text", text: "exercise_index and adjustments required for adjust action" }], isError: true };
+            }
+            const exercise = exercises[args.exercise_index];
+            if (args.adjustments.target_sets !== undefined) exercise.target_sets = args.adjustments.target_sets;
+            if (args.adjustments.target_reps_min !== undefined) exercise.target_reps_min = args.adjustments.target_reps_min;
+            if (args.adjustments.target_reps_max !== undefined) exercise.target_reps_max = args.adjustments.target_reps_max;
+            if (args.adjustments.recommended_weight_kg !== undefined) exercise.recommended_weight_kg = args.adjustments.recommended_weight_kg;
+            actionDescription = `Adjusted ${exercise.exercise_name}`;
+            break;
+        }
+
+        // Update session with modified exercises
+        const { error: updateError } = await supabase
+          .from('workout_sessions')
+          .update({
+            metadata: {
+              ...metadata,
+              planned_exercises: exercises,
+              last_modified_at: new Date().toISOString()
+            }
+          })
+          .eq('id', args.session_id);
+
+        if (updateError) {
+          return { content: [{ type: "text", text: `Error updating workout: ${updateError.message}` }], isError: true };
+        }
+
+        // Format updated workout preview
+        const preview = exercises.map((ex: { exercise_name: string; target_sets: number; target_reps_min: number; target_reps_max: number; recommended_weight_kg: number }, i: number) =>
+          `${i + 1}. ${ex.exercise_name} - ${ex.target_sets}×${ex.target_reps_min}-${ex.target_reps_max} @ ${ex.recommended_weight_kg}kg`
+        ).join('\n');
+
+        return {
+          content: [{
+            type: "text",
+            text: `✅ ${actionDescription}\n\n**Updated Workout:**\n${preview}`
+          }]
+        };
+      }
+    ),
+
+    tool(
       "log_vitals",
       "Log daily vitals (weight, sleep, etc.)",
       {

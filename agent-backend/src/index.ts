@@ -143,6 +143,7 @@ WORKFLOW:
       "mcp__fitness-data__get_recommended_weight",
       "mcp__fitness-data__start_workout",
       "mcp__fitness-data__set_workout_exercises",
+      "mcp__fitness-data__modify_workout_exercises",
       "mcp__fitness-data__log_set",
       "mcp__fitness-data__end_workout",
       "mcp__fitness-data__update_session"
