@@ -1,6 +1,6 @@
 ---
 title: 'AI: Natural Language Exercise Search'
-status: todo
+status: done
 type: feature
 priority: medium
 tags:
@@ -8,7 +8,7 @@ tags:
     - search
     - nlp
 created_at: 2025-12-17T10:00:00Z
-updated_at: 2025-12-17T10:00:00Z
+updated_at: 2025-12-17T14:35:00Z
 links:
     - parent: myHealth-aig0
 ---
@@ -77,7 +77,13 @@ AI: "Für Nacken-Mobilität:
 - Caching für häufige Queries
 
 ## Definition of Done
-- [ ] Beschreibungen werden verstanden
-- [ ] Muskel-basierte Suche funktioniert
-- [ ] Equipment wird berücksichtigt
-- [ ] Alternativen werden vorgeschlagen
+- [x] Beschreibungen werden verstanden ✅ (Conversational AI)
+- [x] Muskel-basierte Suche funktioniert ✅ (get_exercise_library tool)
+- [x] Equipment wird berücksichtigt ✅ (Agent asks and filters)
+- [x] Alternativen werden vorgeschlagen ✅ (Agent knowledge + library)
+
+## Implementation Notes
+- `get_exercise_library` tool with search/filter capabilities
+- CoachAgent understands natural language queries
+- Agent can suggest alternatives based on equipment/preferences
+- Semantic search could be enhanced in future with embeddings

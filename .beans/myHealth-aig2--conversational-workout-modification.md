@@ -1,6 +1,6 @@
 ---
 title: 'AI: Conversational Workout-Modifikation'
-status: todo
+status: done
 type: feature
 priority: critical
 tags:
@@ -8,7 +8,7 @@ tags:
     - core
     - nlp
 created_at: 2025-12-17T10:00:00Z
-updated_at: 2025-12-17T10:00:00Z
+updated_at: 2025-12-17T14:30:00Z
 links:
     - parent: myHealth-aig0
 ---
@@ -70,7 +70,12 @@ Der AI Coach muss verstehen:
 - Undo-Funktion
 
 ## Definition of Done
-- [ ] Alle Modifikations-Typen funktionieren
-- [ ] Context wird korrekt verstanden
-- [ ] Änderungen werden sofort reflektiert
-- [ ] AI erklärt Auswirkungen der Änderung
+- [x] Alle Modifikations-Typen funktionieren ✅ (add, remove, swap, reorder, adjust)
+- [x] Context wird korrekt verstanden ✅ (get_current_session tool)
+- [x] Änderungen werden sofort reflektiert ✅ (modify_workout_exercises updates metadata)
+- [x] AI erklärt Auswirkungen der Änderung ✅ (System prompt instructs this)
+
+## Implementation Notes
+- `modify_workout_exercises` tool supports all modification actions
+- Tool registered with CoachAgent
+- Context awareness via `get_current_session` and workout metadata

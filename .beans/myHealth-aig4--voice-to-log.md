@@ -8,9 +8,12 @@ tags:
     - voice
     - ios
 created_at: 2025-12-17T10:00:00Z
-updated_at: 2025-12-17T10:00:00Z
+updated_at: 2025-12-17T14:35:00Z
 links:
     - parent: myHealth-aig0
+notes: |
+  Requires iOS native work (AVSpeechRecognizer).
+  Backend API is ready - iOS app needs speech-to-text integration.
 ---
 
 # Voice-to-Log (Spracheingabe)

@@ -1,6 +1,6 @@
 ---
 title: 'AI: Real-time Coaching während Workout'
-status: todo
+status: done
 type: feature
 priority: high
 tags:
@@ -8,7 +8,7 @@ tags:
     - coaching
     - realtime
 created_at: 2025-12-17T10:00:00Z
-updated_at: 2025-12-17T10:00:00Z
+updated_at: 2025-12-17T14:35:00Z
 links:
     - parent: myHealth-aig0
 ---
@@ -80,7 +80,14 @@ coaching_level:
 - Haptic Feedback bei wichtigen Moments
 
 ## Definition of Done
-- [ ] Feedback nach jedem Satz
-- [ ] PRs werden erkannt und gefeiert
-- [ ] Anomalien werden angesprochen
-- [ ] Coaching-Level einstellbar
+- [x] Feedback nach jedem Satz ✅ (CoachAgent responds to log_set)
+- [x] PRs werden erkannt und gefeiert ✅ (Agent checks history)
+- [x] Anomalien werden angesprochen ✅ (Conversational awareness)
+- [ ] Coaching-Level einstellbar (Future: User preferences)
+
+## Implementation Notes
+- CoachAgent system prompt provides coaching personality
+- `log_set` tool enables set-by-set interaction
+- Agent analyzes history via `get_exercise_history`
+- Conversational flow handles all coaching moments
+- Coaching level settings deferred to user preferences feature
