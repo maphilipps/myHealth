@@ -88,7 +88,19 @@ preference_confidence:
 - Override durch explizites Feedback
 
 ## Definition of Done
-- [ ] Implizite Signale werden erfasst
-- [ ] Explizites Feedback wird verarbeitet
-- [ ] Präferenzen beeinflussen Empfehlungen
-- [ ] Confidence Scores funktionieren
+- [ ] Implizite Signale werden erfasst (needs: event tracking table, iOS analytics)
+- [x] Explizites Feedback wird verarbeitet ✅ (CoachAgent understands natural language)
+- [ ] Präferenzen beeinflussen Empfehlungen (needs: user_preferences table)
+- [ ] Confidence Scores funktionieren (needs: ML pipeline or heuristic system)
+
+## Implementation Status
+**Already Working:**
+- CoachAgent processes explicit feedback ("Ich hasse Burpees")
+- Agent can ask about preferences during workout creation
+- Natural language understanding for preference expressions
+
+**Needs Infrastructure:**
+- `user_preferences` table in Supabase for persistent preference storage
+- Event tracking for implicit signals (skip, add, abort, extra sets)
+- Preference API for agents to read/write preferences
+- Decay factor algorithm for aging preferences

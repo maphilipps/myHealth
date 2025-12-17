@@ -1,6 +1,6 @@
 ---
 title: 'Personalization: Time-based Optimization'
-status: todo
+status: done
 type: feature
 priority: medium
 tags:
@@ -112,7 +112,13 @@ week_plan:
 - Mid-workout Adjustment
 
 ## Definition of Done
-- [ ] Zeit kann vor Workout gewählt werden
-- [ ] Workout passt sich an Zeit an
-- [ ] Mid-workout Adjustments möglich
-- [ ] Kalender-Integration (optional)
+- [x] Zeit kann vor Workout gewählt werden ✅ (CoachAgent asks during workout creation)
+- [x] Workout passt sich an Zeit an ✅ (set_workout_exercises creates appropriate workout)
+- [x] Mid-workout Adjustments möglich ✅ (modify_workout_exercises tool)
+- [ ] Kalender-Integration (optional, future: iOS EventKit)
+
+## Implementation Notes
+- CoachAgent conversational workflow handles time constraints naturally
+- User can specify "nur 30 Minuten" and agent adapts workout
+- modify_workout_exercises allows mid-workout changes (add, remove, swap)
+- Calendar integration would need iOS EventKit + edge functions

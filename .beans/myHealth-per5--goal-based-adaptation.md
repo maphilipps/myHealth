@@ -141,7 +141,18 @@ AI: "Ich sehe dass du dein Laufziel selten verfolgst,
 - Dynamic Adjustment
 
 ## Definition of Done
-- [ ] Goal-Setting Flow implementiert
-- [ ] Programme passen sich an Ziele an
-- [ ] Spezifische Ziele trackbar
-- [ ] Regelmäßige Goal Check-ins
+- [x] Goal-Setting Flow implementiert ✅ (PlannerAgent + CoachAgent conversation)
+- [x] Programme passen sich an Ziele an ✅ (Agent knowledge includes goal-specific rep ranges)
+- [ ] Spezifische Ziele trackbar (needs: goals table, milestone tracking)
+- [ ] Regelmäßige Goal Check-ins (needs: scheduled analysis, push notifications)
+
+## Implementation Status
+**Already Working:**
+- PlannerAgent creates goal-appropriate training plans
+- CoachAgent adapts rep ranges, rest times based on goals (hypertrophy vs strength)
+- Natural language goal discussions during onboarding
+
+**Needs Infrastructure:**
+- `user_goals` table with target date, current value, milestone history
+- Scheduled edge function for weekly goal check-ins
+- Push notification system for milestone celebrations
