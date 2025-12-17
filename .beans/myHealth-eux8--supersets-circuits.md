@@ -145,8 +145,19 @@ superset_rules:
 - AI Pairing Suggestions
 
 ## Definition of Done
-- [ ] Supersets erstellbar
-- [ ] Tri-Sets/Giant Sets Support
-- [ ] Circuit Mode
-- [ ] AI Pairing Suggestions
-- [ ] Timer passt sich an
+- [ ] Supersets erstellbar (needs: iOS UI, Supabase schema update)
+- [ ] Tri-Sets/Giant Sets Support (needs: iOS UI)
+- [ ] Circuit Mode (needs: iOS UI, timer component)
+- [x] AI Pairing Suggestions ✅ (CoachAgent can suggest supersets conversationally)
+- [ ] Timer passt sich an (needs: iOS workout timer)
+
+## Implementation Status
+**Already Working:**
+- CoachAgent can suggest superset pairings (push/pull, antagonist, etc.)
+- Agent can create workouts with superset structure in conversation
+
+**Needs iOS Development:**
+- Superset grouping UI in workout builder
+- Timer flow adjustment (no rest between superset exercises)
+- Visual indication of superset grouping
+- Schema update: `workout_exercises.superset_group_id`
