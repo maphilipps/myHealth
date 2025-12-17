@@ -1,6 +1,6 @@
 ---
 title: 'Analytics: Recovery Recommendations'
-status: todo
+status: done
 type: feature
 priority: high
 tags:

@@ -1,6 +1,6 @@
 ---
 title: 'Analytics: Strength Standards Vergleich'
-status: todo
+status: done
 type: feature
 priority: low
 tags:

@@ -1,6 +1,6 @@
 ---
 title: 'Analytics: Injury Prevention Alerts'
-status: todo
+status: done
 type: feature
 priority: medium
 tags:

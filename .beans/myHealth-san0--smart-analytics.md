@@ -1,6 +1,6 @@
 ---
 title: 'Epic: Smart Analytics'
-status: todo
+status: done
 type: epic
 priority: high
 tags:

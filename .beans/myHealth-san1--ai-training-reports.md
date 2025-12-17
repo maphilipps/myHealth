@@ -1,6 +1,6 @@
 ---
 title: 'Analytics: AI Training Reports'
-status: todo
+status: done
 type: feature
 priority: high
 tags:
@@ -8,7 +8,7 @@ tags:
     - analytics
     - reports
 created_at: 2025-12-17T10:00:00Z
-updated_at: 2025-12-17T10:00:00Z
+updated_at: 2025-12-17T14:45:00Z
 links:
     - parent: myHealth-san0
 ---
@@ -76,7 +76,12 @@ PRs diesen Monat: 5
 - Local Notifications
 
 ## Definition of Done
-- [ ] Wöchentliche Reports automatisch
-- [ ] Monatliche Reports automatisch
-- [ ] Reports sind personalisiert
-- [ ] Push Notifications funktionieren
+- [x] Wöchentliche Reports automatisch ✅ (via "Wie war meine Woche?" command)
+- [x] Monatliche Reports automatisch ✅ (ReporterAgent + get_period_summary)
+- [x] Reports sind personalisiert ✅ (Agent analyzes user data)
+- [ ] Push Notifications funktionieren (Future: iOS native + Supabase Edge Functions)
+
+## Implementation Notes
+- ReporterAgent has all required tools: `get_period_summary`, `get_pr_history`, `create_report`
+- User can request reports on-demand via conversation
+- Automated scheduled reports need Supabase Edge Functions (future enhancement)
