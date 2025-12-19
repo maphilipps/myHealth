@@ -14,6 +14,13 @@
 import { query } from "@anthropic-ai/claude-agent-sdk";
 import { config } from "dotenv";
 import { supabaseToolsServer } from "./tools/supabase.js";
+import type {
+  PlanChatMessageDTO,
+  ConversationMessage,
+  ContentBlock,
+  PlannerConversationResult,
+  GeneratedPlanPreview
+} from "./types/conversation.js";
 
 // Load environment variables
 config();
@@ -101,6 +108,24 @@ Use this agent when the user wants to:
 DEINE ROLLE:
 Du reagierst auf JEDEN Satz, gibst Empfehlungen und motivierst. Du bist im Moment präsent.
 
+KRITISCH - WORKOUT-ERSTELLUNG (PFLICHT!):
+Wenn der User ein Workout haben möchte, MUSST du diese Tools in dieser Reihenfolge aufrufen:
+1. get_exercise_library - Finde passende Übungen (z.B. mit muscle_group="chest" für Push)
+2. start_workout - Erstelle eine Session (gibt session_id zurück)
+3. set_workout_exercises - Speichere die Übungen mit der session_id
+
+BEISPIEL für set_workout_exercises:
+Nach start_workout mit session_id="abc-123", rufe auf:
+set_workout_exercises({
+  session_id: "abc-123",
+  exercises: [
+    { exercise_id: "uuid", exercise_name: "Bench Press", target_sets: 4, target_reps_min: 8, target_reps_max: 12, recommended_weight_kg: 60 },
+    { exercise_id: "uuid", exercise_name: "Shoulder Press", target_sets: 3, target_reps_min: 8, target_reps_max: 10 }
+  ]
+})
+
+NIEMALS ein Workout nur als Text ausgeben ohne set_workout_exercises aufzurufen!
+
 WICHTIG - KEINE ALGORITHMEN:
 Du entscheidest NICHT mit "if rpe > 8.5: weight -= 5%".
 Stattdessen überlegst du:
@@ -128,7 +153,7 @@ MOTIVATION:
 - Halte den User fokussiert
 
 WORKFLOW:
-1. Bei Workout-Start: Plan und User-State holen
+1. Bei Workout-Start: get_exercise_library → start_workout → set_workout_exercises
 2. Bei jeder Übung: Historie checken, Empfehlung geben
 3. Nach jedem Satz: Loggen, Feedback, nächsten Satz vorbereiten
 4. Bei Workout-Ende: Zusammenfassen, motivieren`,
@@ -285,44 +310,78 @@ Nutze Emojis sparsam aber effektiv:
  */
 const mainSystemPrompt = `Du bist myHealth - dein persönlicher Fitness-Coach.
 
-WICHTIG - NAHTLOSE UX:
-- Erwähne NIEMALS interne Agents, Systeme oder Architektur dem User gegenüber
-- Du bist EIN Coach, nicht mehrere - der User sieht nur "myHealth"
-- Sprich immer in der ersten Person Singular ("Ich empfehle...", "Ich sehe...")
+WICHTIG - WORKOUT-ERSTELLUNG:
+Wenn der User ein Workout erstellen möchte, HANDLE ES SELBST und delegiere NICHT an einen Sub-Agenten!
+Rufe diese Tools in dieser Reihenfolge auf:
+1. mcp__fitness-data__get_exercise_library - Suche passende Übungen (z.B. mit muscle_group Parameter)
+2. mcp__fitness-data__start_workout - Erstelle Session (gibt session_id zurück)
+3. mcp__fitness-data__set_workout_exercises - Speichere die Übungen
 
-KONVERSATIONELLER WORKFLOW:
-Wenn der User ein Workout oder Plan möchte:
-1. Frage nach dem Ziel heute (Muskelgruppe, Split-Tag, etc.)
-2. Frage nach verfügbarer Zeit und Equipment
-3. Erstelle das Workout mit konkreten Empfehlungen
-4. Zeige das fertige Workout übersichtlich an
+BEISPIEL für set_workout_exercises nach start_workout:
+{
+  "session_id": "die-session-id-von-start_workout",
+  "exercises": [
+    {"exercise_id": "uuid-aus-library", "exercise_name": "Bench Press", "target_sets": 4, "target_reps_min": 8, "target_reps_max": 12}
+  ]
+}
 
-Beispiel-Dialog:
-User: "Ich will trainieren"
-Du: "Cool, lass uns loslegen! 💪 Was steht heute an - Oberkörper, Unterkörper, oder hast du einen bestimmten Split (z.B. Push/Pull/Legs, Torso/Limbs)?"
+NIEMALS ein Workout nur als Text ausgeben - IMMER Tools aufrufen!
+Wenn Tools fehlschlagen, versuche es erneut oder erkläre den genauen Fehler.
 
-WICHTIGSTES PRINZIP - INTELLIGENTE ENTSCHEIDUNGEN:
-Du verwendest KEINE hardcoded Algorithmen oder Formeln.
-Analysiere den Kontext (Historie, Recovery, Ziele) und entscheide intelligent.
+DELEGIERE NUR:
+- Langfristige Planung/Programme → PlannerAgent
+- Detaillierte Analysen → AnalystAgent
+- Wöchentliche/Monatliche Reports → ReporterAgent
 
-ROUTING (intern, nicht kommunizieren):
-- Planung/Programme → PlannerAgent
-- Live-Training → CoachAgent
-- Analyse/Trends → AnalystAgent
-- Summaries/Reports → ReporterAgent
+HANDLE SELBST (NICHT delegieren):
+- "Erstelle ein Workout" → Direkt start_workout + set_workout_exercises aufrufen
+- "Starte Training" → Direkt start_workout aufrufen
+- Einfache Fragen → Direkt antworten
 
 KOMMUNIKATION:
 - Sprich Deutsch (außer bei Übungsnamen)
 - Sei motivierend aber authentisch
-- Stelle Rückfragen wenn nötig
-- Gib konkrete Empfehlungen (Gewicht, Sets, Reps)
-- Formatiere Workouts übersichtlich mit Markdown`;
+- Formatiere Workouts übersichtlich mit Markdown
+- Erwähne keine internen Systeme dem User gegenüber`;
 
 /**
  * Query the Fitness Agents
  *
  * This function provides the main interface to interact with the fitness agents.
  */
+// All available MCP tools from the fitness-data server
+const fitnessDataTools = [
+  "mcp__fitness-data__get_user_profile",
+  "mcp__fitness-data__get_equipment_available",
+  "mcp__fitness-data__get_training_history",
+  "mcp__fitness-data__get_current_plan",
+  "mcp__fitness-data__get_exercise_library",
+  "mcp__fitness-data__get_todays_plan",
+  "mcp__fitness-data__get_exercise_history",
+  "mcp__fitness-data__get_current_session",
+  "mcp__fitness-data__get_user_state",
+  "mcp__fitness-data__get_exercise_trends",
+  "mcp__fitness-data__get_volume_by_muscle",
+  "mcp__fitness-data__get_pr_history",
+  "mcp__fitness-data__get_period_summary",
+  "mcp__fitness-data__get_stored_insights",
+  "mcp__fitness-data__get_goals_progress",
+  "mcp__fitness-data__get_streak_info",
+  "mcp__fitness-data__get_exercise_details",
+  "mcp__fitness-data__create_plan",
+  "mcp__fitness-data__update_plan",
+  "mcp__fitness-data__start_workout",
+  "mcp__fitness-data__log_set",
+  "mcp__fitness-data__end_workout",
+  "mcp__fitness-data__update_session",
+  "mcp__fitness-data__create_insight",
+  "mcp__fitness-data__create_report",
+  "mcp__fitness-data__set_workout_exercises",
+  "mcp__fitness-data__get_recommended_weight",
+  "mcp__fitness-data__modify_workout_exercises",
+  "mcp__fitness-data__log_vitals"
+];
+
 export async function queryFitnessAgents(prompt: string) {
   const response = query({
     prompt,
@@ -333,6 +392,8 @@ export async function queryFitnessAgents(prompt: string) {
         "fitness-data": supabaseToolsServer
       },
       agents: agentDefinitions,
+      allowedTools: fitnessDataTools,
+      tools: [], // Disable built-in tools, use only MCP tools
       permissionMode: "bypassPermissions" // For backend use
     }
   });
@@ -343,14 +404,31 @@ export async function queryFitnessAgents(prompt: string) {
   for await (const message of response) {
     messages.push(message);
 
-    // Log agent lifecycle for debugging
-    if (message.type === 'system') {
+    // VERBOSE logging - show ALL message types
+    const msgType = (message as { type?: string }).type;
+    const msgSubtype = (message as { subtype?: string }).subtype;
+    console.log(`\n📩 Message [${msgType}${msgSubtype ? '/' + msgSubtype : ''}]: ${JSON.stringify(message).slice(0, 300)}`);
+
+    // Detailed logging for debugging (use msgType string to avoid TS type narrowing issues)
+    if (msgType === 'system') {
       const systemMsg = message as { subtype?: string; agent_name?: string };
       if (systemMsg.subtype === 'subagent_start') {
         console.log(`\n🤖 Starting agent: ${systemMsg.agent_name}`);
       } else if (systemMsg.subtype === 'subagent_end') {
         console.log(`✅ Agent completed: ${systemMsg.agent_name}`);
       }
+    } else if (msgType === 'tool_call' || msgType === 'tool_use') {
+      const toolMsg = message as { tool_name?: string; name?: string };
+      console.log(`\n🔧 TOOL CALL: ${toolMsg.tool_name || toolMsg.name}`);
+    } else if (msgType === 'tool_result') {
+      const resultMsg = message as { tool_name?: string; result?: string; error?: string };
+      if (resultMsg.error) {
+        console.log(`\n❌ Tool error (${resultMsg.tool_name}): ${resultMsg.error}`);
+      } else {
+        console.log(`\n✅ Tool result (${resultMsg.tool_name}): ${String(resultMsg.result).slice(0, 100)}...`);
+      }
+    } else if (msgType === 'error') {
+      console.log(`\n❌ Error: ${JSON.stringify(message)}`);
     }
   }
 
@@ -362,6 +440,249 @@ export async function queryFitnessAgents(prompt: string) {
     result: resultMessage?.result || assistantMessages.map((m: { content?: string }) => m.content).join('\n'),
     messages,
     success: !!resultMessage
+  };
+}
+
+/**
+ * System Prompt for Conversational Plan Creation
+ */
+const plannerConversationPrompt = `Du bist ein erfahrener Trainingsplaner für myHealth.
+
+DEINE ROLLE:
+Du hilfst dem User interaktiv dabei, seinen perfekten Trainingsplan zu erstellen.
+Du arbeitest KONVERSATIONELL - nicht als Formular oder Wizard.
+
+KONVERSATIONS-ABLAUF:
+1. User beschreibt seinen Wunsch (z.B. "Torso Limbs bei 5x die Woche")
+2. Du skizzierst einen ersten Grundplan
+3. Du stellst EINE gezielte Nachfrage pro Nachricht
+4. User antwortet, du verfeinerst den Plan
+5. Wenn der Plan komplett ist: "Soll ich den Plan aktivieren?"
+
+BEISPIEL-NACHFRAGEN (EINE pro Nachricht):
+- "Welches Equipment hast du zur Verfügung?"
+- "Wie lange soll eine Session maximal dauern?"
+- "Gibt es Verletzungen oder Einschränkungen?"
+- "Hast du bestimmte Übungs-Präferenzen?"
+
+BILDER:
+Wenn der User ein Bild/Screenshot eines bestehenden Plans schickt:
+- Analysiere die gezeigten Übungen, Sets, Reps
+- Integriere relevante Elemente in den neuen Plan
+- Frage nach was beibehalten werden soll
+
+PLAN-FORMAT (wenn du einen Plan zeigst):
+Zeige Pläne übersichtlich so:
+
+---
+**Tag 1: [Name]**
+- Übung 1: 4×8-10
+- Übung 2: 3×10-12
+...
+
+**Tag 2: [Name]**
+...
+---
+
+WICHTIGE REGELN:
+- Sei konversationell und freundlich
+- Stelle MAXIMAL eine Frage pro Nachricht
+- Zeige immer den aktuellen Plan-Stand wenn relevant
+- Wenn der Plan fertig ist, frage EXPLIZIT: "Soll ich den Plan aktivieren?"
+- Nutze die User-Präferenzen aus dem Profil wenn verfügbar
+
+AKTIVIERUNG:
+Wenn der User die Aktivierung bestätigt:
+- Nutze create_plan_with_exercises Tool um den Plan zu speichern
+- Bestätige die erfolgreiche Aktivierung
+
+SPRACHE:
+- Deutsch
+- Übungsnamen können Englisch bleiben (Bench Press, etc.)`;
+
+/**
+ * Convert iOS messages to Claude API format with image support
+ */
+function convertToCloudeMessages(messages: PlanChatMessageDTO[]): ConversationMessage[] {
+  return messages
+    .filter(msg => msg.role !== 'system') // Filter system messages
+    .map(msg => {
+      // If message has image data, use content blocks format
+      if (msg.imageData) {
+        const contentBlocks: ContentBlock[] = [];
+
+        // Add text content if present
+        if (msg.content && msg.content.trim()) {
+          contentBlocks.push({
+            type: 'text',
+            text: msg.content
+          });
+        }
+
+        // Add image content
+        contentBlocks.push({
+          type: 'image',
+          source: {
+            type: 'base64',
+            media_type: 'image/jpeg', // iOS sends JPEG
+            data: msg.imageData
+          }
+        });
+
+        return {
+          role: msg.role as 'user' | 'assistant',
+          content: contentBlocks
+        };
+      }
+
+      // Simple text message
+      return {
+        role: msg.role as 'user' | 'assistant',
+        content: msg.content
+      };
+    });
+}
+
+/**
+ * Extract plan from AI response text if present
+ */
+function extractPlanFromResponse(text: string): GeneratedPlanPreview | undefined {
+  // Look for structured plan in response
+  // This is a simple extraction - can be enhanced with JSON output format
+
+  // Check if response contains plan-like structure
+  const dayPattern = /\*\*Tag\s+(\d+):\s*([^*]+)\*\*/g;
+  const matches = [...text.matchAll(dayPattern)];
+
+  if (matches.length === 0) {
+    return undefined;
+  }
+
+  // Extract days
+  const days = matches.map((match, index) => {
+    const dayNumber = parseInt(match[1]);
+    const dayName = match[2].trim();
+
+    // Extract exercises for this day (simplified extraction)
+    const exercisePattern = /-\s*([^:]+):\s*(\d+)×(\d+)(?:-(\d+))?/g;
+
+    // Find the section for this day
+    const dayStart = match.index!;
+    const nextDayMatch = matches[index + 1];
+    const dayEnd = nextDayMatch ? nextDayMatch.index! : text.length;
+    const daySection = text.slice(dayStart, dayEnd);
+
+    const exerciseMatches = [...daySection.matchAll(exercisePattern)];
+
+    const exercises = exerciseMatches.map(exMatch => ({
+      name: exMatch[1].trim(),
+      sets: parseInt(exMatch[2]),
+      repsMin: parseInt(exMatch[3]),
+      repsMax: exMatch[4] ? parseInt(exMatch[4]) : parseInt(exMatch[3]),
+      restSeconds: 90, // Default
+      notes: undefined
+    }));
+
+    return {
+      dayNumber,
+      name: dayName,
+      exercises
+    };
+  });
+
+  if (days.length === 0 || days.every(d => d.exercises.length === 0)) {
+    return undefined;
+  }
+
+  return {
+    name: "Neuer Trainingsplan",
+    description: "Von AI generierter Plan",
+    daysPerWeek: days.length,
+    goal: "hypertrophy",
+    days
+  };
+}
+
+/**
+ * Query the Planner Agent in conversation mode
+ *
+ * Takes the full message history and returns the next response
+ * with optional plan preview and activation suggestion.
+ */
+export async function queryPlannerConversation(
+  messages: PlanChatMessageDTO[]
+): Promise<PlannerConversationResult> {
+  // Convert messages to Claude format
+  const claudeMessages = convertToCloudeMessages(messages);
+
+  // Build a prompt from the last user message for the query function
+  // The conversation history provides context
+  const lastUserMessage = messages.filter(m => m.role === 'user').pop();
+  const prompt = lastUserMessage?.content || "";
+
+  // For now, we use the existing query pattern but with conversation system prompt
+  // In future, can use full messages array if SDK supports it
+  const conversationContext = claudeMessages
+    .slice(0, -1) // All except last message
+    .map(m => {
+      const content = typeof m.content === 'string'
+        ? m.content
+        : m.content.filter(c => c.type === 'text').map(c => (c as { text: string }).text).join(' ');
+      return `${m.role === 'user' ? 'User' : 'Coach'}: ${content}`;
+    })
+    .join('\n\n');
+
+  const fullPrompt = conversationContext
+    ? `Bisherige Konversation:\n${conversationContext}\n\n---\n\nAktuelle User-Nachricht: ${prompt}`
+    : prompt;
+
+  const response = query({
+    prompt: fullPrompt,
+    options: {
+      model: "claude-sonnet-4-5",
+      systemPrompt: plannerConversationPrompt,
+      mcpServers: {
+        "fitness-data": supabaseToolsServer
+      },
+      allowedTools: [
+        "mcp__fitness-data__get_user_profile",
+        "mcp__fitness-data__get_equipment_available",
+        "mcp__fitness-data__get_exercise_library",
+        "mcp__fitness-data__create_plan",
+        "mcp__fitness-data__update_plan"
+      ],
+      tools: [],
+      permissionMode: "bypassPermissions"
+    }
+  });
+
+  // Collect response
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const responseMessages: any[] = [];
+
+  for await (const message of response) {
+    responseMessages.push(message);
+  }
+
+  // Extract final text
+  const resultMessage = responseMessages.find(m => m.type === 'result' && m.subtype === 'success');
+  const assistantMessages = responseMessages.filter(m => m.type === 'assistant');
+
+  const responseText = resultMessage?.result ||
+    assistantMessages.map((m: { content?: string }) => m.content).join('\n');
+
+  // Check for activation suggestion
+  const suggestsActivation = /soll ich (den|diesen) plan aktivieren/i.test(responseText) ||
+    /möchtest du (den|diesen) plan aktivieren/i.test(responseText) ||
+    /plan aktivieren\?/i.test(responseText);
+
+  // Extract plan preview if present
+  const plan = extractPlanFromResponse(responseText);
+
+  return {
+    text: responseText,
+    plan,
+    suggestsActivation
   };
 }
 

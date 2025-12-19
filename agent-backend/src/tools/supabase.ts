@@ -1215,6 +1215,152 @@ export const supabaseToolsServer = createSdkMcpServer({
       }
     ),
 
+    // ==================== PLAN CREATION WITH EXERCISES ====================
+
+    tool(
+      "create_plan_with_exercises",
+      "Create a complete training plan with all days and exercises in one call. Use this when generating a full plan from the Plan Wizard.",
+      {
+        name: z.string().describe("Plan name (e.g., '4-Day Upper/Lower Split')"),
+        description: z.string().optional().describe("Plan description"),
+        goal: z.enum(['strength', 'hypertrophy', 'endurance', 'general']).describe("Training goal"),
+        days_per_week: z.number().min(2).max(7).describe("Training days per week"),
+        days: z.array(z.object({
+          day_number: z.number().min(1).max(7).describe("Day number in the week (1-7)"),
+          name: z.string().describe("Day name (e.g., 'Upper A - Push Focus')"),
+          workout_type: z.string().describe("Workout type (e.g., 'upper', 'lower', 'push', 'pull', 'legs', 'full_body')"),
+          exercises: z.array(z.object({
+            exercise_id: z.string().describe("Exercise UUID from library"),
+            order_index: z.number().describe("Order in the workout (1, 2, 3...)"),
+            target_sets: z.number().min(1).max(10).describe("Number of sets"),
+            target_reps_min: z.number().min(1).describe("Minimum reps"),
+            target_reps_max: z.number().min(1).describe("Maximum reps"),
+            rest_seconds: z.number().min(30).max(300).default(90).describe("Rest between sets in seconds"),
+            notes: z.string().optional().describe("Form cues or instructions")
+          })).describe("Exercises for this day")
+        })).describe("Training days with exercises"),
+        user_id: z.string().optional()
+      },
+      async (args) => {
+        const userId = args.user_id || getDefaultUserId();
+
+        try {
+          // 1. Deactivate existing plans
+          await supabase
+            .from('training_plans')
+            .update({ is_active: false })
+            .eq('user_id', userId)
+            .eq('is_active', true);
+
+          // 2. Create the plan
+          const { data: plan, error: planError } = await supabase
+            .from('training_plans')
+            .insert({
+              user_id: userId,
+              name: args.name,
+              description: args.description,
+              goal: args.goal,
+              days_per_week: args.days_per_week,
+              is_active: true
+            })
+            .select()
+            .single();
+
+          if (planError || !plan) {
+            return { content: [{ type: "text", text: `Error creating plan: ${planError?.message}` }], isError: true };
+          }
+
+          // 3. Create plan days with exercises
+          for (const day of args.days) {
+            const { data: planDay, error: dayError } = await supabase
+              .from('plan_days')
+              .insert({
+                plan_id: plan.id,
+                day_number: day.day_number,
+                name: day.name,
+                workout_type: day.workout_type
+              })
+              .select()
+              .single();
+
+            if (dayError || !planDay) {
+              console.error(`Error creating plan day: ${dayError?.message}`);
+              continue;
+            }
+
+            // 4. Add exercises to day
+            if (day.exercises.length > 0) {
+              const exercisesToInsert = day.exercises.map(ex => ({
+                plan_day_id: planDay.id,
+                exercise_id: ex.exercise_id,
+                order_index: ex.order_index,
+                target_sets: ex.target_sets,
+                target_reps_min: ex.target_reps_min,
+                target_reps_max: ex.target_reps_max,
+                rest_seconds: ex.rest_seconds || 90,
+                notes: ex.notes
+              }));
+
+              const { error: exError } = await supabase
+                .from('plan_exercises')
+                .insert(exercisesToInsert);
+
+              if (exError) {
+                console.error(`Error adding exercises to day ${day.name}: ${exError.message}`);
+              }
+            }
+          }
+
+          // 5. Fetch the complete plan to return
+          const { data: completePlan, error: fetchError } = await supabase
+            .from('training_plans')
+            .select(`
+              *,
+              plan_days (
+                *,
+                plan_exercises (
+                  *,
+                  exercises (name, muscle_groups)
+                )
+              )
+            `)
+            .eq('id', plan.id)
+            .single();
+
+          if (fetchError) {
+            return { content: [{ type: "text", text: `Plan created but error fetching details: ${fetchError.message}` }] };
+          }
+
+          // Format preview
+          const preview = (completePlan.plan_days || [])
+            .sort((a: { day_number: number }, b: { day_number: number }) => a.day_number - b.day_number)
+            .map((day: { name: string; plan_exercises: Array<{ exercises: { name: string }; target_sets: number; target_reps_min: number; target_reps_max: number }> }) => {
+              const exercises = (day.plan_exercises || [])
+                .map((ex: { exercises: { name: string }; target_sets: number; target_reps_min: number; target_reps_max: number }) =>
+                  `   • ${ex.exercises?.name || 'Unknown'}: ${ex.target_sets}×${ex.target_reps_min}-${ex.target_reps_max}`)
+                .join('\n');
+              return `📅 ${day.name}\n${exercises}`;
+            }).join('\n\n');
+
+          return {
+            content: [{
+              type: "text",
+              text: `✅ Training plan created and activated!\n\n**${args.name}**\nGoal: ${args.goal} | ${args.days_per_week} days/week\n\n${preview}\n\nPlan ID: ${plan.id}`
+            }]
+          };
+
+        } catch (error) {
+          return {
+            content: [{
+              type: "text",
+              text: `Error creating plan: ${error instanceof Error ? error.message : 'Unknown error'}`
+            }],
+            isError: true
+          };
+        }
+      }
+    ),
+
     tool(
       "log_vitals",
       "Log daily vitals (weight, sleep, etc.)",
