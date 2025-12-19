@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Navigation } from './components/Navigation'
+import { Navigation, type Page } from './components/Navigation'
 import { Dashboard } from './pages/Dashboard'
 import { WorkoutSession } from './pages/WorkoutSession'
 import { QuickLog } from './pages/QuickLog'
@@ -7,8 +7,7 @@ import { Nutrition } from './pages/Nutrition'
 import { Settings } from './pages/Settings'
 import { History } from './pages/History'
 import { Progress } from './pages/Progress'
-
-type Page = 'dashboard' | 'workout' | 'log' | 'nutrition' | 'history' | 'progress' | 'settings'
+import { CreatePlan } from './pages/CreatePlan'
 
 function App() {
   const [currentPage, setCurrentPage] = useState<Page>('dashboard')
@@ -16,9 +15,11 @@ function App() {
   const renderPage = () => {
     switch (currentPage) {
       case 'dashboard':
-        return <Dashboard />
+        return <Dashboard onNavigate={setCurrentPage} />
       case 'workout':
         return <WorkoutSession />
+      case 'create-plan':
+        return <CreatePlan />
       case 'log':
         return <QuickLog />
       case 'nutrition':
@@ -30,7 +31,7 @@ function App() {
       case 'settings':
         return <Settings />
       default:
-        return <Dashboard />
+        return <Dashboard onNavigate={setCurrentPage} />
     }
   }
 

@@ -13,7 +13,7 @@ import {
   Cog6ToothIcon as CogIconSolid
 } from '@heroicons/react/24/solid'
 
-type Page = 'dashboard' | 'workout' | 'log' | 'nutrition' | 'history' | 'progress' | 'settings'
+export type Page = 'dashboard' | 'workout' | 'log' | 'nutrition' | 'history' | 'progress' | 'settings' | 'create-plan'
 
 interface NavigationProps {
   currentPage: Page

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { saveApiKey, hasApiKey, clearApiKey } from '../lib/claude-api'
+import { getAllTrainingPlans, type TrainingPlan } from '../lib/training-plans'
 import {
   getPendingChangesCount,
   downloadPendingChanges,
@@ -16,11 +17,24 @@ export function Settings() {
   const [saved, setSaved] = useState(false)
   const [pendingCount, setPendingCount] = useState(0)
   const [commitMessage, setCommitMessage] = useState('')
+  const [availablePlans, setAvailablePlans] = useState<TrainingPlan[]>([])
+  const [selectedPlan, setSelectedPlan] = useState('torso-limbs')
   const { theme, setTheme } = useTheme()
 
   useEffect(() => {
     setHasKey(hasApiKey())
     updatePendingStatus()
+    setAvailablePlans(getAllTrainingPlans())
+    
+    const settings = localStorage.getItem('myhealth_settings')
+    if (settings) {
+      try {
+        const parsed = JSON.parse(settings)
+        if (parsed.trainingPlan) setSelectedPlan(parsed.trainingPlan)
+      } catch (e) {
+        console.error('Error parsing settings', e)
+      }
+    }
   }, [])
 
   const updatePendingStatus = () => {
@@ -39,6 +53,16 @@ export function Settings() {
       setApiKey('')
       setTimeout(() => setSaved(false), 2000)
     }
+  }
+
+  const handlePlanChange = (planId: string) => {
+    setSelectedPlan(planId)
+    const settings = localStorage.getItem('myhealth_settings')
+    const currentSettings = settings ? JSON.parse(settings) : {}
+    localStorage.setItem('myhealth_settings', JSON.stringify({
+      ...currentSettings,
+      trainingPlan: planId
+    }))
   }
 
   const handleClear = () => {
@@ -266,11 +290,16 @@ export function Settings() {
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Trainingsplan
             </label>
-            <select className="input" defaultValue="torso-limbs">
-              <option value="torso-limbs">Torso-Limbs Split</option>
-              <option value="push-pull-legs">Push Pull Legs</option>
-              <option value="upper-lower">Upper Lower</option>
-              <option value="full-body">Full Body</option>
+            <select 
+              className="input" 
+              value={selectedPlan}
+              onChange={(e) => handlePlanChange(e.target.value)}
+            >
+              {availablePlans.map(plan => (
+                <option key={plan.id} value={plan.id}>
+                  {plan.name}
+                </option>
+              ))}
             </select>
           </div>
         </div>

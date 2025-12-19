@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { PlayIcon, CheckIcon, PlusIcon, XMarkIcon, ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid'
+import { PlayIcon, CheckIcon, PlusIcon, XMarkIcon, ChevronDownIcon, ChevronUpIcon, ArrowPathIcon } from '@heroicons/react/24/solid'
 import { ClockIcon } from '@heroicons/react/24/outline'
 import { getWorkouts, saveWorkout, type Workout, type WorkoutExercise } from '../lib/data-service'
 import { getTodaysWorkout, getLastExerciseSession, type Exercise, type TrainingDay } from '../lib/training-plans'
@@ -103,6 +103,22 @@ export function WorkoutSession() {
       if (interval) clearInterval(interval)
     }
   }, [restTimerActive, restTimeLeft])
+
+  const loadLastSet = useCallback((exerciseIndex: number, setIndex: number) => {
+    setExercises(prev => prev.map((ex, i) => {
+      if (i !== exerciseIndex) return ex
+      const lastSessionSet = ex.lastSession?.[setIndex]
+      if (!lastSessionSet) return ex
+      
+      const newSets = [...ex.sets]
+      newSets[setIndex] = { 
+        ...newSets[setIndex], 
+        weight: lastSessionSet.weight.toString(),
+        reps: lastSessionSet.reps.toString()
+      }
+      return { ...ex, sets: newSets }
+    }))
+  }, [])
 
   const startWorkout = useCallback(() => {
     setWorkoutStarted(true)
@@ -402,6 +418,42 @@ export function WorkoutSession() {
                     ))}
                   </div>
                 )}
+
+                {/* Quick Actions */}
+                <div className="flex gap-2 mb-2 overflow-x-auto pb-1">
+                  <button
+                    onClick={() => {
+                      const activeSetIndex = exerciseState.sets.findIndex(s => !s.completed)
+                      if (activeSetIndex === -1) return
+                      const currentWeight = parseFloat(exerciseState.sets[activeSetIndex].weight) || 0
+                      updateSet(exerciseIndex, activeSetIndex, 'weight', (currentWeight + 2.5).toString())
+                    }}
+                    className="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-xs font-medium hover:bg-gray-200 dark:hover:bg-gray-700 whitespace-nowrap"
+                  >
+                    +2.5kg
+                  </button>
+                  <button
+                    onClick={() => {
+                      const activeSetIndex = exerciseState.sets.findIndex(s => !s.completed)
+                      if (activeSetIndex === -1) return
+                      const currentReps = parseInt(exerciseState.sets[activeSetIndex].reps) || 0
+                      updateSet(exerciseIndex, activeSetIndex, 'reps', (currentReps + 1).toString())
+                    }}
+                    className="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-xs font-medium hover:bg-gray-200 dark:hover:bg-gray-700 whitespace-nowrap"
+                  >
+                    +1 Rep
+                  </button>
+                  <button
+                    onClick={() => {
+                      const activeSetIndex = exerciseState.sets.findIndex(s => !s.completed)
+                      if (activeSetIndex !== -1) loadLastSet(exerciseIndex, activeSetIndex)
+                    }}
+                    className="px-3 py-1 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-full text-xs font-medium hover:bg-blue-100 dark:hover:bg-blue-900/40 whitespace-nowrap flex items-center gap-1"
+                  >
+                    <ArrowPathIcon className="w-3 h-3" />
+                    Wie letztes Mal
+                  </button>
+                </div>
 
                 {/* Sets */}
                 <div className="space-y-2">

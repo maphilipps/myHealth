@@ -13,7 +13,11 @@ interface DailyStats {
   workoutType?: string
 }
 
-export function Dashboard() {
+interface DashboardProps {
+  onNavigate?: (page: any) => void
+}
+
+export function Dashboard({ onNavigate }: DashboardProps) {
   const [stats, setStats] = useState<DailyStats>({})
   const [greeting, setGreeting] = useState('')
   const [showWeekly, setShowWeekly] = useState(false)
@@ -134,10 +138,26 @@ export function Dashboard() {
           Schnellaktionen
         </h2>
         <div className="grid grid-cols-2 gap-2">
-          <QuickAction icon="🏋️" label="Workout starten" />
-          <QuickAction icon="🍽️" label="Mahlzeit loggen" />
-          <QuickAction icon="⚖️" label="Gewicht eintragen" />
-          <QuickAction icon="💧" label="Wasser trinken" />
+          <QuickAction 
+            icon="🏋️" 
+            label="Workout starten" 
+            onClick={() => onNavigate?.('workout')}
+          />
+          <QuickAction 
+            icon="📝" 
+            label="Plan erstellen" 
+            onClick={() => onNavigate?.('create-plan')}
+          />
+          <QuickAction 
+            icon="🍽️" 
+            label="Mahlzeit loggen" 
+            onClick={() => onNavigate?.('nutrition')}
+          />
+          <QuickAction 
+            icon="⚖️" 
+            label="Gewicht eintragen" 
+            onClick={() => onNavigate?.('log')}
+          />
         </div>
       </div>
     </div>
@@ -211,11 +231,15 @@ function SummaryItem({ icon, label, value, status }: SummaryItemProps) {
 interface QuickActionProps {
   icon: string
   label: string
+  onClick?: () => void
 }
 
-function QuickAction({ icon, label }: QuickActionProps) {
+function QuickAction({ icon, label, onClick }: QuickActionProps) {
   return (
-    <button className="flex items-center gap-2 p-3 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+    <button 
+      onClick={onClick}
+      className="flex items-center gap-2 p-3 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+    >
       <span>{icon}</span>
       <span className="text-sm text-gray-700 dark:text-gray-200">{label}</span>
     </button>

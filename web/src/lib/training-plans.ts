@@ -1,3 +1,5 @@
+import { getStoredTrainingPlans } from './data-service'
+
 // Training Plans und Übungen für myHealth
 
 export interface Exercise {
@@ -59,7 +61,7 @@ export const EXERCISES: Record<string, Exercise> = {
 }
 
 // Trainingspläne
-export const TRAINING_PLANS: TrainingPlan[] = [
+export const DEFAULT_TRAINING_PLANS: TrainingPlan[] = [
   {
     id: 'torso-limbs',
     name: 'Torso-Limbs Split',
@@ -196,8 +198,12 @@ export const TRAINING_PLANS: TrainingPlan[] = [
 ]
 
 // Hilfsfunktionen
+export function getAllTrainingPlans(): TrainingPlan[] {
+  return [...DEFAULT_TRAINING_PLANS, ...getStoredTrainingPlans()]
+}
+
 export function getTrainingPlan(planId: string): TrainingPlan | undefined {
-  return TRAINING_PLANS.find(p => p.id === planId)
+  return getAllTrainingPlans().find(p => p.id === planId)
 }
 
 export function getTodaysWorkout(planId: string, lastWorkoutType?: string): TrainingDay | undefined {

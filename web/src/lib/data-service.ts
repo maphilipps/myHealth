@@ -1,3 +1,5 @@
+import type { TrainingPlan } from './training-plans'
+
 // Data Service für myHealth
 // Lädt und speichert Daten aus/in YAML-Dateien (localStorage für Web)
 
@@ -77,7 +79,8 @@ const STORAGE_KEYS = {
   WORKOUTS: 'myhealth_workouts',
   NUTRITION: 'myhealth_nutrition',
   VITALS: 'myhealth_vitals',
-  SETTINGS: 'myhealth_settings'
+  SETTINGS: 'myhealth_settings',
+  PLANS: 'myhealth_training_plans'
 }
 
 // Sample data for initial load
@@ -140,6 +143,29 @@ function initializeData(): void {
   if (!localStorage.getItem(STORAGE_KEYS.WORKOUTS)) {
     localStorage.setItem(STORAGE_KEYS.WORKOUTS, JSON.stringify(sampleWorkouts))
   }
+}
+
+// Training Plans
+export function getStoredTrainingPlans(): TrainingPlan[] {
+  const data = localStorage.getItem(STORAGE_KEYS.PLANS)
+  return data ? JSON.parse(data) : []
+}
+
+export function saveTrainingPlan(plan: TrainingPlan): void {
+  const plans = getStoredTrainingPlans()
+  const index = plans.findIndex(p => p.id === plan.id)
+  if (index >= 0) {
+    plans[index] = plan
+  } else {
+    plans.push(plan)
+  }
+  localStorage.setItem(STORAGE_KEYS.PLANS, JSON.stringify(plans))
+}
+
+export function deleteTrainingPlan(planId: string): void {
+  const plans = getStoredTrainingPlans()
+  const filtered = plans.filter(p => p.id !== planId)
+  localStorage.setItem(STORAGE_KEYS.PLANS, JSON.stringify(filtered))
 }
 
 // Daily Logs
