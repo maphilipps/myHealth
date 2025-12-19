@@ -106,6 +106,7 @@ Agent: "Okay, ich plane ein kurzes Oberkörper-Workout ohne
 2. **Smart Analytics** - Agents analysieren & reporten
 3. **Personalization Engine** - Agents lernen Präferenzen
 4. **Enhanced UX Features** - Minimal UI für Agent-Output
+5. **Nutrition Intelligence** - NutritionAgent für Essens-Tracking mit Pattern Recognition
 
 ## Nach Abschluss
 - [ ] Beta-Tester Feedback einholen

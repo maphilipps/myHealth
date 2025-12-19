@@ -86,4 +86,4 @@ Erstelle ein optimales Workout.
 - `set_workout_exercises` tool added to CoachAgent
 - `get_recommended_weight` tool for progressive overload
 - Conversational UX: Agent asks questions before creating workout
-- Web demo updated to hide internal architecture
+- iOS App shows workout in clean UI (internal architecture hidden)

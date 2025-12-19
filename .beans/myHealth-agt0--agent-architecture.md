@@ -32,10 +32,10 @@ links:
 │              (Claude Agent SDK / Multi-Agent)                │
 ├─────────────────────────────────────────────────────────────┤
 │                                                              │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
-│  │  Planner    │  │   Coach     │  │  Analyst    │         │
-│  │  Agent      │  │   Agent     │  │  Agent      │         │
-│  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘         │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  │
+│  │  Planner    │  │   Coach     │  │  Analyst    │  │ Nutrition   │  │
+│  │  Agent      │  │   Agent     │  │  Agent      │  │   Agent     │  │
+│  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘  │
 │         │                │                │                 │
 │         └────────────────┼────────────────┘                 │
 │                          │                                  │
@@ -53,7 +53,7 @@ links:
 ┌─────────────────────────────────────────────────────────────┐
 │                       Supabase                               │
 │                    (Pure Data Store)                         │
-│   exercises | workouts | sets | vitals | plans | prefs      │
+│  exercises | workouts | sets | vitals | plans | meals | patterns  │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -153,6 +153,34 @@ Agent ENTSCHEIDET basierend auf:
 - Wie präsentiere ich Daten verständlich?
 - Welche Narrative passt?
 
+---
+
+### NutritionAgent
+**Aufgabe:** Intelligenter Ernährungs-Coach mit Pattern Recognition
+
+**Tools:**
+- `get_todays_meals()` - Heute geloggte Mahlzeiten
+- `get_nutrition_goals()` - Makro-Ziele
+- `get_macro_progress()` - Fortschritt heute
+- `get_eating_patterns()` - Erkannte Gewohnheiten
+- `get_favorite_foods()` - Häufig geloggte Foods
+- `log_meal()` - Mahlzeit speichern
+- `update_eating_pattern()` - Muster aktualisieren
+- `search_food_database()` - Food Lookup
+
+**Entscheidet:**
+- Wann proaktiv nachfragen? (basierend auf Patterns)
+- Welche Foods empfehlen? (basierend auf Makro-Gap + Favoriten)
+- Wie Training-Sync umsetzen? (mehr Carbs an Trainingstagen)
+- Welche Muster sind relevant?
+
+**Beispiel-Interaktionen:**
+```
+"Hey, du trinkst doch jeden Morgen deinen Shake - schon getrunken?"
+"Du brauchst noch 50g Protein. Dein Hähnchen-Wrap wäre perfekt!"
+"Heute ist Bein-Tag - vergiss nicht extra Carbs vor dem Training!"
+```
+
 ## Agent Coordination
 
 ### Handoffs
@@ -167,6 +195,14 @@ User: "Ich will jetzt trainieren"
 User: "Wie lief es diese Woche?"
 → Orchestrator routet zu ReporterAgent
 → ReporterAgent kann AnalystAgent für Insights fragen
+
+User: "Ich hab grad Hähnchen mit Reis gegessen"
+→ Orchestrator routet zu NutritionAgent
+→ NutritionAgent loggt und gibt Makro-Update
+
+User: "Was soll ich noch essen heute?"
+→ NutritionAgent prüft Makro-Gap + Favoriten
+→ Gibt personalisierte Empfehlungen
 ```
 
 ### Shared Context
@@ -225,6 +261,7 @@ const tools = {
 - [x] CoachAgent leitet komplettes Workout ✅
 - [x] AnalystAgent erkennt Muster ✅
 - [x] ReporterAgent erstellt Reports ✅
+- [ ] NutritionAgent mit Pattern Recognition
 - [x] Agents können untereinander kommunizieren ✅ (via Orchestrator)
 - [x] KEINE Business Logic außerhalb der Agents ✅
 
