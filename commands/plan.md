@@ -1,112 +1,110 @@
 ---
-description: Create or view training plan with progressive overload
-argument-hint: [action] - "new", "view", "next workout", or exercise-specific query
-allowed-tools: Read, Write, Edit, Glob, Grep
+description: Transform feature ideas into well-structured .beans plans for myHealth
+argument-hint: "[feature description, bug report, or improvement idea]"
 ---
 
-# Training Plan Management
+# Create a myHealth Feature Plan
 
-Handle training plan operations.
+Transform feature descriptions into well-structured .beans markdown files following myHealth conventions.
 
-## Request: $ARGUMENTS
+## Feature Description
 
-## Actions
+<feature_description> #$ARGUMENTS </feature_description>
 
-### "new" / "create" - Create New Training Plan
+**If empty, ask:** "What would you like to plan? Describe the feature, bug fix, or improvement."
 
-1. Ask for plan details if not provided:
-   - Split type (torso-limbs, push-pull-legs, full body, etc.)
-   - Training days per week
-   - Goals (strength, hypertrophy, both)
-   - Available equipment
+## Planning Workflow
 
-2. Generate plan structure in `data/plans/[plan-name].yaml`
+### 1. Context Gathering (Parallel)
 
-3. Include:
-   - Weekly schedule
-   - Exercise selection per day
-   - Sets, rep ranges, rest periods
-   - Progression rules
+Run these agents in parallel to gather context:
 
-Use training-intelligence skill for exercise selection and periodization.
+- **Task beans-analyzer**: Find related epics/features in `.beans/`
+- **Task ios-developer**: Research iOS patterns if UI-related
+- **Task agent-sdk-developer**: Research agent patterns if AI-related
 
-### "view" / "show" - View Current Plan
+### 2. Determine Scope
 
-1. Find active plan in `data/plans/`
-2. Display:
-   - Schedule overview
-   - This week's workouts
-   - Current progression status
+Based on the feature description:
 
-### "next" / "today" / "workout" - Get Next Workout
+| Type | Naming Pattern | Example |
+|------|----------------|---------|
+| **Epic** | `myHealth-{4char}--{title}.md` | `myHealth-nut0--nutrition-intelligence.md` |
+| **Feature** | `myHealth-{4char}--{title}.md` | `myHealth-nut1--smart-food-logging.md` |
+| **Task** | `myHealth-{4char}--{title}.md` | `myHealth-nut1a--calorie-api-integration.md` |
 
-1. Determine what workout is scheduled today
-2. Read recent workout history for each exercise
-3. Apply progressive overload algorithm:
+Generate a unique 4-character ID by:
+1. Using first 3 letters of domain (e.g., `nut` for nutrition, `aig` for AI generation)
+2. Adding sequential number (0, 1, 2...)
 
-For each exercise:
-```
-1. Find last session data
-2. Check performance (reps achieved, RPE)
-3. Calculate target weight:
-   - Hit top of rep range + RPE ≤ 8 → +2.5kg (barbell) or +2kg (dumbbell)
-   - Hit top of rep range + RPE 9 → Maintain
-   - Missed reps → Maintain or reduce
-4. Set target reps (middle of rep range)
-```
+### 3. Research Existing Patterns
 
-4. Output workout card:
+- [ ] Check similar features in `.beans/` directory
+- [ ] Review iOS app structure in `myhealth-ios/`
+- [ ] Review agent structure in `agent-backend/`
+- [ ] Find similar Supabase patterns
 
-```
-🏋️ Today's Workout: [Type]
+### 4. Create .beans File
 
-1. EXERCISE NAME
-   Target: Xkg × X-X reps × X sets
-   (Last: Xkg × X,X,X @ RPE X)
-   Rest: X min
+**Template:**
 
-2. EXERCISE NAME
-   ...
-
-Notes:
-- [Any relevant notes]
-- [Form cues if needed]
+```yaml
+---
+title: 'Feature: [Title]'
+status: todo
+type: feature  # epic, feature, task, milestone
+priority: high  # high, medium, low
+tags:
+  - [relevant-tag]
+created_at: [ISO timestamp]
+updated_at: [ISO timestamp]
+links:
+  - parent: myHealth-[parent-id]  # If child of an epic
+---
 ```
 
-### Exercise-specific query
+**Markdown body includes:**
 
-If user asks about specific exercise ("what weight for bench?"):
+1. **Overview** - What and why
+2. **User Story** - As a [user], I want [goal] so that [benefit]
+3. **Acceptance Criteria** - Checkboxes for testable requirements
+4. **Technical Approach** - How to implement
+5. **Files to Create/Modify** - With line references
+6. **Dependencies** - Other beans this requires
+7. **Testing Strategy** - How to verify
 
-1. Find that exercise in current plan
-2. Look up last session performance
-3. Apply progression logic
-4. Return specific recommendation
+### 5. Link to Parent Epic
 
-### "adjust" / "modify" - Adjust Plan
+If this is a feature under an epic:
+- Add `parent: myHealth-[epic-id]` to links
+- Update parent epic's updated_at timestamp
 
-If user wants to modify plan:
+## Output
 
-1. Identify what to change
-2. Update plan file
-3. Recalculate affected progressions
+Write the plan to `.beans/myHealth-{id}--{title}.md`
 
-### "deload" - Plan Deload Week
+## Post-Creation Options
 
-1. Create deload version of current plan
-2. Reduce volume (50% sets) or intensity (60% weight)
-3. Schedule for 1 week
+Use **AskUserQuestion** to present:
 
-## Progressive Overload Logic
+1. **Start /mh:work** - Begin implementing this plan
+2. **Review with agents** - Get feedback from relevant agents
+3. **Create child features** - Break into smaller tasks
+4. **View in Typora** - Open for review
 
-Use training-intelligence skill for:
-- Double progression calculations
-- Periodization decisions
-- Plateau detection
-- Deload timing
+## myHealth-Specific Considerations
 
-## Response
+### iOS Features
+- SwiftUI view patterns from `myhealth-ios/myHealth/Sources/Views/`
+- ViewModel patterns with @MainActor
+- Supabase Swift SDK integration
 
-After any action, confirm:
-- What was done
-- Current plan status
-- Next scheduled workout
+### Agent Features
+- Claude Agent SDK patterns from `agent-backend/src/`
+- Tool design with Zod schemas
+- System prompt engineering
+
+### Database Features
+- Supabase PostgreSQL with RLS
+- Migration files in `supabase/migrations/`
+- Type generation for Swift/TypeScript

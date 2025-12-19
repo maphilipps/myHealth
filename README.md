@@ -1,99 +1,87 @@
 # myHealth - Personal Health Tracking System
 
-Ein umfassendes Gesundheits-Tracking-System mit Claude Code Integration für intelligente Analyse und Workout-Coaching.
+Ein umfassendes Gesundheits-Tracking-System mit nativer iOS App und Claude Agent SDK Backend für intelligente Analyse und Workout-Coaching.
 
 ## Features
 
+- **iOS Native App** (SwiftUI + Supabase)
 - **Workout Tracking** mit Progressive Overload
 - **Ernährungs-Tracking** mit Makro-Analyse
 - **Vitaldaten-Monitoring** (Gewicht, Schlaf, Herzfrequenz)
-- **Apple Health & Yazio Integration** (Auto-Sync)
-- **Intelligente Analyse** via Claude Code Agents
-- **Mobile Web-UI** für unterwegs
-- **Git-versionierte YAML-Daten**
+- **Apple Health Integration** (Auto-Sync)
+- **AI Agents** (FitnessCoach, PlanCreator, Analyst, Reporter, Nutrition)
+- **Supabase Backend** (PostgreSQL + Auth + RLS)
 
 ## Architektur
 
 ```
 myHealth/
-├── .claude-plugin/      # Claude Code Plugin
-├── commands/            # Slash-Commands
-├── agents/              # Spezialisierte Agents
-├── skills/              # Wissens-Skills
-├── hooks/               # Event-Hooks (Sync, Validierung)
-├── data/                # YAML-Daten (Git-versioniert)
-│   ├── daily/          # Tägliche Logs
-│   ├── workouts/       # Training-Sessions
-│   ├── nutrition/      # Ernährung
-│   ├── vitals/         # Vitaldaten
-│   ├── plans/          # Trainingspläne
-│   └── exercises/      # Übungs-Bibliothek
-├── web/                 # React + ShadCN Web-UI
-└── scripts/             # Sync & Utility Scripts
+├── myhealth-ios/        # Native iOS App (SwiftUI)
+├── agent-backend/       # Claude Agent SDK Backend
+│   ├── src/agents/     # AI Agents
+│   ├── src/tools/      # Supabase Tools
+│   ├── Dockerfile      # Fly.io Deployment
+│   └── fly.toml        # Fly.io Config
+├── supabase/           # Database Migrations
+├── .beans/             # Project Planning
+└── data-archive/       # Historische YAML-Daten
 ```
 
 ## Quick Start
 
-### Claude Code Plugin aktivieren
+### 1. Supabase Backend
+
+Die Datenbank läuft auf Supabase (PostgreSQL mit RLS):
 
 ```bash
-cd myHealth
-claude
+# Migrations anwenden
+cd supabase
+supabase db push
 ```
 
-### Verfügbare Commands
-
-- `/myhealth:log` - Schnelles Eintragen
-- `/myhealth:analyze` - Daten analysieren
-- `/myhealth:report` - Reports generieren
-- `/myhealth:plan` - Trainingsplan erstellen
-- `/myhealth:import` - Daten importieren
-
-### Web-UI starten
+### 2. Agent Backend (Entwicklung)
 
 ```bash
-cd web
+cd agent-backend
 npm install
-npm run dev
+npm run dev:server
+# → http://localhost:3001
 ```
 
-## Datenformat
+### 3. iOS App (Xcode)
 
-Alle Daten werden als YAML gespeichert und mit Git versioniert.
-
-### Beispiel: Täglicher Log
-
-```yaml
-# data/daily/2024-01-15.yaml
-date: 2024-01-15
-weight: 82.5
-water_ml: 2500
-sleep_hours: 7.5
-mood: 4
-notes: "Gutes Training heute"
+```bash
+open myhealth-ios/myHealth.xcodeproj
+# Cmd+R zum Starten im Simulator
 ```
 
-### Beispiel: Workout
+## AI Agents
 
-```yaml
-# data/workouts/2024-01-15-torso.yaml
-date: 2024-01-15
-type: torso
-duration_min: 75
-exercises:
-  - name: Bench Press
-    sets:
-      - weight: 80
-        reps: 8
-        rpe: 8
-      - weight: 80
-        reps: 7
-        rpe: 9
+| Agent | Aufgabe |
+|-------|---------|
+| **PlannerAgent** | Trainingsplan-Erstellung |
+| **CoachAgent** | Echtzeit-Coaching im Workout |
+| **AnalystAgent** | Trend-Analyse & Insights |
+| **ReporterAgent** | Wöchentliche Reports |
+| **NutritionAgent** | Ernährungs-Tracking & Muster |
+
+## Deployment
+
+| Komponente | Plattform | URL |
+|------------|-----------|-----|
+| **iOS App** | App Store | TestFlight / Production |
+| **Agent Backend** | Fly.io | `https://myhealth-agents.fly.dev` |
+| **Database** | Supabase | `https://xxx.supabase.co` |
+
+### Agent Backend deployen
+
+```bash
+cd agent-backend
+fly auth login
+fly deploy
 ```
 
-## Auto-Sync
-
-Apple Health Daten werden automatisch beim Start von Claude Code synchronisiert (via SessionStart Hook).
+Siehe `.beans/myHealth-dep0--agent-backend-deployment.md` für Details.
 
 ## Lizenz
 

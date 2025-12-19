@@ -1,17 +1,10 @@
 {
-  "name": "myhealth",
+  "name": "mh",
   "version": "0.1.0",
-  "description": "Personal Health Tracking System - Workout coaching mit Progressive Overload, Ernährung, Vitaldaten. YAML-basiert mit Git-Versionierung.",
+  "description": "Development toolkit for myHealth - iOS App, Agent SDK Backend, and .beans planning system",
   "author": {
     "name": "Marc Philipps",
-    "email": "marc.philipps@adesso.de"
+    "email": "marcphilipps92@gmail.com"
   },
-  "keywords": [
-    "health",
-    "fitness",
-    "workout",
-    "nutrition",
-    "tracking",
-    "progressive-overload"
-  ]
+  "repository": "https://github.com/maphilipps/myHealth"
 }
