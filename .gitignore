@@ -35,3 +35,4 @@ secrets/
 
 # Playwright MCP screenshots
 .playwright-mcp/
+myhealth-ios/
