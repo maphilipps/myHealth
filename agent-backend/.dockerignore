@@ -1,0 +1,34 @@
+# Dependencies
+node_modules
+
+# Build output (wird im Container neu gebaut)
+dist
+
+# Development files
+*.log
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# Tests
+coverage
+*.test.ts
+__tests__
+
+# Git
+.git
+.gitignore
+
+# Docs
+*.md
+!README.md
+
+# OS files
+.DS_Store
+Thumbs.db
